@@ -8,16 +8,24 @@
     android:background="@color/background_color"
     tools:context=".MainActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigation_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/navigation_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:background="@color/background_color"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/btn_padding_horizontal"
-        android:paddingTop="@dimen/btn_padding_vertical"
-        android:paddingEnd="@dimen/btn_padding_horizontal"
-        android:paddingBottom="@dimen/btn_padding_vertical"
+        android:paddingHorizontal="@dimen/btn_padding_horizontal"
+        android:paddingVertical="@dimen/spacing_small_vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
@@ -27,18 +35,14 @@
             android:layout_marginEnd="@dimen/btn_margin_between"
             android:layout_weight="1"
             android:backgroundTint="@color/button_category_color"
-            android:paddingTop="@dimen/btn_category_padding_vertical"
-            android:paddingBottom="@dimen/btn_category_padding_vertical"
-            android:text="@string/btn_category" />
+            android:text="@string/title_category" />
 
         <Button
             style="@style/StyleNavButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="@dimen/btn_favorite_padding_vertical"
-            android:paddingBottom="@dimen/btn_favorite_padding_vertical"
-            android:text="@string/btn_favorite"
+            android:text="@string/title_favorite"
             app:backgroundTint="@color/button_favorite_color"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"
