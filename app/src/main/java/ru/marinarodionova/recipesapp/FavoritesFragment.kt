@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
 
-
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding
