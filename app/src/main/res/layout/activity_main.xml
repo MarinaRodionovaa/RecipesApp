@@ -29,22 +29,24 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id = "@+id/btnCategory"
+            android:id="@+id/btnCategory"
             style="@style/StyleNavButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/btn_margin_between"
             android:layout_weight="1"
             android:backgroundTint="@color/button_category_color"
-            android:text="@string/title_category" />
+            android:text="@string/title_category"
+            android:textColor="@color/white" />
 
         <Button
-            android:id = "@+id/btnFavorite"
+            android:id="@+id/btnFavorite"
             style="@style/StyleNavButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/title_favorite"
+            android:textColor="@color/white"
             app:backgroundTint="@color/button_favorite_color"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"

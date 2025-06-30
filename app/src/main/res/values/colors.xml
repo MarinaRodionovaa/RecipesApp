@@ -6,4 +6,6 @@
     <color name="button_favorite_color">#E13E3E</color>
     <color name="background_color">#F4FAFF</color>
     <color name="status_bar_color">#4D4D87</color>
+    <color name="title_color">#5F3678</color>
+    <color name="description_color">#666666</color>
 </resources>
