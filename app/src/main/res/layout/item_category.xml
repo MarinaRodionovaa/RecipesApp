@@ -2,9 +2,9 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="160dp"
-    android:layout_height="220dp"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/half_margin"
     android:layout_marginVertical="@dimen/standard_margin"
     android:backgroundTint="@color/white"
@@ -12,10 +12,7 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/radius_small"
-    app:cardElevation="4dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
+    app:cardElevation="@dimen/card_elevation"
     app:strokeColor="@android:color/transparent">
 
     <LinearLayout
@@ -25,35 +22,26 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.6"
+            android:layout_height="130dp"
             android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:src ="@drawable/category_image"/>
-        <LinearLayout
+            tools:src="@drawable/category_image" />
+
+
+        <TextView
+            style="@style/StyleTitle14"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_margin="@dimen/half_margin"
-                tools:text="Заголвок"
-                android:textColor="@color/title_color"
-                style="@style/StyleTitle14"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/half_margin"
+            tools:text="Заголвок" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/half_margin"
-                app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/StyleDescription12"
-                android:textColor="@color/description_color"
-                tools:text="Описание"/>
-        </LinearLayout>
-
+        <TextView
+            style="@style/StyleDescription12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/half_margin"
+            android:layout_marginBottom="@dimen/half_margin"
+            tools:text="Описание" />
     </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

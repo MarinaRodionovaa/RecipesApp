@@ -24,8 +24,8 @@
         android:layout_centerHorizontal="true"
         android:background="@color/background_color"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/btn_padding_horizontal"
-        android:paddingVertical="@dimen/spacing_small_vertical"
+        android:paddingHorizontal="@dimen/standard_padding"
+        android:paddingVertical="@dimen/half_margin"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
@@ -33,11 +33,10 @@
             style="@style/StyleNavButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/btn_margin_between"
+            android:layout_marginEnd="@dimen/small_margin"
             android:layout_weight="1"
             android:backgroundTint="@color/button_category_color"
-            android:text="@string/title_category"
-            android:textColor="@color/white" />
+            android:text="@string/title_category" />
 
         <Button
             android:id="@+id/btnFavorite"
@@ -46,7 +45,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/title_favorite"
-            android:textColor="@color/white"
             app:backgroundTint="@color/button_favorite_color"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"

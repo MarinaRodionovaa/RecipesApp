@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="spacing_small_vertical">8dp</dimen>
-    <dimen name="btn_padding_horizontal">16dp</dimen>
-    <dimen name="btn_margin_between">4dp</dimen>
-    <dimen name="radius_small">8dp</dimen>
-    <dimen name="standard_margin">16dp</dimen>
-    <dimen name="half_margin">8dp</dimen>
     <dimen name="ttl_padding">10dp</dimen>
-
+    <dimen name="standard_padding">16dp</dimen>
+    <dimen name="small_margin">4dp</dimen>
+    <dimen name="half_margin">8dp</dimen>
+    <dimen name="standard_margin">16dp</dimen>
+    <dimen name="radius_small">8dp</dimen>
+    <dimen name="hdr_height">234dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
 </resources>
