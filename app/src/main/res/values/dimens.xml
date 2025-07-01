@@ -8,4 +8,5 @@
     <dimen name="radius_small">8dp</dimen>
     <dimen name="hdr_height">234dp</dimen>
     <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_category_height">130dp</dimen>
 </resources>
