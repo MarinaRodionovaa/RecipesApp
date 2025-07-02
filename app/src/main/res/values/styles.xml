@@ -30,7 +30,7 @@
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">
         <item name="android:textAppearance">@style/StyleButtonTitle14</item>
-        <item name="cornerRadius">8dp</item>
+        <item name="cornerRadius">@dimen/radius_small</item>
         <item name="android:backgroundTint">@color/button_favorite_color</item>
     </style>
 

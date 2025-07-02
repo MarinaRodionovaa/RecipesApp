@@ -1,5 +1,7 @@
 package ru.marinarodionova.recipesapp
 
+import ru.marinarodionova.recipesapp.models.Category
+
 object STUB {
     private val categories = listOf(
         Category(

@@ -1,7 +1,7 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.models
 
 data class Ingredient(
-    val quantity: Double,
+    val quantity: String,
     val unitOfMeasure: String,
     val description: String,
-    )
+)

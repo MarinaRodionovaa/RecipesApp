@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/half_margin"
-    android:layout_marginVertical="@dimen/standard_margin"
+    android:layout_marginVertical="@dimen/half_margin"
     android:backgroundTint="@color/white"
     android:clickable="true"
     android:focusable="true"
@@ -21,13 +21,14 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/image_category"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/card_category_height"
             android:scaleType="centerCrop"
             tools:src="@drawable/category_image" />
 
-
         <TextView
+            android:id="@+id/title_category"
             style="@style/StyleTitle14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
             tools:text="Заголвок" />
 
         <TextView
+            android:id="@+id/description_category"
             style="@style/StyleDescription12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,6 +44,5 @@
             android:layout_marginBottom="@dimen/half_margin"
             tools:text="Описание" />
     </LinearLayout>
-
 
 </androidx.cardview.widget.CardView>
