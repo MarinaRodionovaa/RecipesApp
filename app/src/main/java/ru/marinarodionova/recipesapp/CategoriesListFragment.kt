@@ -12,7 +12,7 @@ class CategoriesListFragment : Fragment() {
     private var _binding: FragmentCategoriesListBinding? = null
     private val binding
         get() = _binding
-            ?: throw IllegalStateException("Binding for ActivityLearnWordBinding must not be null")
+            ?: throw IllegalStateException("Binding for FragmentCategoriesListBinding must not be null")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +32,7 @@ class CategoriesListFragment : Fragment() {
         _binding = null
     }
 
-    private fun initRecycler(){
+    private fun initRecycler() {
         val categoriesListAdapter = CategoriesListAdapter(STUB.getCategories())
         binding.rvCategories.adapter = categoriesListAdapter
     }

@@ -10,15 +10,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.marinarodionova.recipesapp.models.Category
 import java.io.InputStream
+import ru.marinarodionova.recipesapp.databinding.ItemCategoryBinding
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.image_category)
-        val titleTextView: TextView = view.findViewById(R.id.title_category)
-        val descriptionTextView: TextView = view.findViewById(R.id.description_category)
+        private val binding = ItemCategoryBinding.bind(view)
+        val imageView: ImageView = binding.imageCategory
+        val titleTextView: TextView = binding.titleCategory
+        val descriptionTextView: TextView = binding.descriptionCategory
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
