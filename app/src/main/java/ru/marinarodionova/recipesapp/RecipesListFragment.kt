@@ -13,6 +13,10 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for ActivityLearnWordBinding must not be null")
 
+    private var argCategoryId: Int? = null
+    private var argCategoryName: String? = null
+    private var argCategoryImageUrl: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,5 +28,12 @@ class RecipesListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        argCategoryId = requireArguments().getInt("ARG_CATEGORY_ID")
+        argCategoryName = requireArguments().getString("ARG_CATEGORY_NAME")
+        argCategoryImageUrl = requireArguments().getString("ARG_CATEGORY_IMAGE_URL")
+
     }
 }
