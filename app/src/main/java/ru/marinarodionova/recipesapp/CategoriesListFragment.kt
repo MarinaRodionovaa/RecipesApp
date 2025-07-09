@@ -40,12 +40,24 @@ class CategoriesListFragment : Fragment() {
 
         categoriesListAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick() {
-                parentFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace<RecipesListFragment>(R.id.mainFragmentContainer)
-                }
+            override fun onItemClick(categoryId: Int) {
+                openRecipesByCategoryId(categoryId)
             }
         })
+    }
+
+    fun openRecipesByCategoryId(categoryId: Int) {
+        val category = STUB.getCategories().find { it.id == categoryId } ?: return
+        val categoryName = category.title
+        val categoryImageUrl = category.imageUrl
+        val bundle = Bundle().apply {
+            putInt("ARG_CATEGORY_ID", categoryId)
+            putString("ARG_CATEGORY_NAME", categoryName)
+            putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+        }
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<RecipesListFragment>(R.id.mainFragmentContainer, args = bundle)
+        }
     }
 }
