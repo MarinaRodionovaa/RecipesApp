@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
     tools:context=".CategoriesListFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/hdr_height">
+
+        <ImageView
+            android:id="@+id/ivRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/category_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvRecipeTitle"
+            style="@style/ShapeDrawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginBottom="@dimen/standard_margin"
+            android:background="@drawable/shape_drawable"
+            android:padding="@dimen/ttl_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Бургеры" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecipe"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_recipe"
-        android:textColor="@color/black"
-        android:textSize="50sp" />
-</FrameLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/half_margin"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:spanCount="1"
+        tools:itemCount="8"
+        tools:listitem="@layout/item_recipe" />
+</LinearLayout>

@@ -16,7 +16,7 @@
     </style>
 
     <style name="StyleDescription12" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold_600</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_medium_500</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/description_color</item>
     </style>

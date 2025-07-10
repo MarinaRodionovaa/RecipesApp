@@ -9,4 +9,5 @@
     <dimen name="hdr_height">234dp</dimen>
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="card_category_height">130dp</dimen>
+    <dimen name="card_recipe_height">100dp</dimen>
 </resources>

@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
+import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 
-class FavoritesFragment : Fragment() {
-    private var _binding: FragmentFavoritesBinding? = null
+class RecipeFragment : Fragment() {
+    private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for ActivityLearnWordBinding must not be null")
@@ -17,7 +17,7 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -25,4 +25,5 @@ class FavoritesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

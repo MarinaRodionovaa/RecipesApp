@@ -1,11 +1,15 @@
 package ru.marinarodionova.recipesapp
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipesListBinding
+import java.io.InputStream
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentRecipesListBinding? = null
@@ -30,10 +34,45 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
+    private fun initRecycler() {
+        val categoryId = argCategoryId ?: return
+        val dataSet = STUB.getRecipesByCategoryId(categoryId) ?: return
+        val recipesListAdapter = RecipesListAdapter(dataSet)
+        binding.rvRecipe.adapter = recipesListAdapter
+
+        recipesListAdapter.setOnItemClickListener(object :
+            RecipesListAdapter.OnItemClickListener {
+            override fun onItemClick(recipeId: Int) {
+                openRecipeByRecipeId(recipeId)
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         argCategoryId = requireArguments().getInt("ARG_CATEGORY_ID")
         argCategoryName = requireArguments().getString("ARG_CATEGORY_NAME")
         argCategoryImageUrl = requireArguments().getString("ARG_CATEGORY_IMAGE_URL")
+        binding.tvRecipeTitle.text = argCategoryName
 
+        val inputStream: InputStream? =
+            argCategoryImageUrl?.let { binding.ivRecipe.context?.assets?.open(it) }
+        val drawable = Drawable.createFromStream(inputStream, null)
+        binding.ivRecipe.setImageDrawable(drawable)
+        initRecycler()
+    }
+
+    fun openRecipeByRecipeId(recipeId: Int) {
+        val recipe = STUB.getRecipesByCategoryId(recipeId)?.find { it.id == recipeId } ?: return
+        val recipeName = recipe.title
+        val recipeImageUrl = recipe.imageUrl
+        val bundle = Bundle().apply {
+            putInt("ARG_RECIPE_ID", recipeId)
+            putString("ARG_RECIPE_NAME", recipeName)
+            putString("ARG_RECIPE_IMAGE_URL", recipeImageUrl)
+        }
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<RecipeFragment>(R.id.mainFragmentContainer)
+        }
     }
 }
