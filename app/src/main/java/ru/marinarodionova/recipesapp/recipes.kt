@@ -268,10 +268,10 @@ object STUB {
 
     fun getCategories(): List<Category> = categories
 
-    fun getRecipesByCategoryId(categoryId: Int):List<Recipe>? {
-        return if (categoryId == 0){
+    fun getRecipesByCategoryId(categoryId: Int): List<Recipe> {
+        return if (categoryId == 0) {
             burgerRecipes
-        } else null
+        } else listOf()
     }
 
 }

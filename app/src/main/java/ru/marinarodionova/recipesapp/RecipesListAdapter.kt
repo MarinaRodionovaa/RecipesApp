@@ -13,7 +13,6 @@ import java.io.InputStream
 import ru.marinarodionova.recipesapp.databinding.ItemRecipeBinding
 
 class RecipesListAdapter(private val dataSet: List<Recipe>) :
-
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -40,20 +39,20 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val recipe: Recipe = dataSet[position]
-        viewHolder.titleTextView.text = recipe.title
-
-        val inputStream: InputStream? =
-            try {
-                viewHolder.itemView.context?.assets?.open(dataSet[position].imageUrl)
-            } catch (e: Exception) {
-                Log.d("!!!", "Image not found ${recipe.imageUrl}")
-                null
+        with(viewHolder) {
+            titleTextView.text = recipe.title
+            val inputStream: InputStream? =
+                try {
+                    itemView.context?.assets?.open(dataSet[position].imageUrl)
+                } catch (e: Exception) {
+                    Log.d("!!!", "Image not found ${recipe.imageUrl}")
+                    null
+                }
+            val drawable = Drawable.createFromStream(inputStream, null)
+            imageView.setImageDrawable(drawable)
+            itemView.setOnClickListener {
+                itemClickListener?.onItemClick(recipeId = position)
             }
-        val drawable = Drawable.createFromStream(inputStream, null)
-        viewHolder.imageView.setImageDrawable(drawable)
-
-        viewHolder.itemView.setOnClickListener {
-            itemClickListener?.onItemClick(recipeId = position)
         }
 
     }
