@@ -7,9 +7,10 @@
     tools:context=".CategoriesListFragment">
 
     <TextView
+        android:id="@+id/tvRecipeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Рецепт"
+        tools:text="Рецепт"
         android:textColor="@color/black"
         android:textSize="50sp" />
 </FrameLayout>

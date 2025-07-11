@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:src="@drawable/category_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/category_image" />
 
         <TextView
             android:id="@+id/tvRecipeTitle"
@@ -43,7 +43,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/half_margin"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:spanCount="1"
         tools:itemCount="8"
         tools:listitem="@layout/item_recipe" />
 </LinearLayout>
