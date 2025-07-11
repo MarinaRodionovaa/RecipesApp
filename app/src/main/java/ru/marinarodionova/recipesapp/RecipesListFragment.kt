@@ -36,7 +36,7 @@ class RecipesListFragment : Fragment() {
 
     private fun initRecycler() {
         val categoryId = argCategoryId ?: return
-        val dataSet = STUB.getRecipesByCategoryId(categoryId) ?: return
+        val dataSet = STUB.getRecipesByCategoryId(categoryId)
         val recipesListAdapter = RecipesListAdapter(dataSet)
         binding.rvRecipe.adapter = recipesListAdapter
 
@@ -62,17 +62,13 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipesByCategoryId(recipeId)?.find { it.id == recipeId } ?: return
-        val recipeName = recipe.title
-        val recipeImageUrl = recipe.imageUrl
+        val recipe = STUB.getRecipeById(recipeId)
         val bundle = Bundle().apply {
-            putInt("ARG_RECIPE_ID", recipeId)
-            putString("ARG_RECIPE_NAME", recipeName)
-            putString("ARG_RECIPE_IMAGE_URL", recipeImageUrl)
+            putParcelable("ARG_RECIPE", recipe)
         }
         parentFragmentManager.commit {
             setReorderingAllowed(true)
-            replace<RecipeFragment>(R.id.mainFragmentContainer)
+            replace<RecipeFragment>(R.id.mainFragmentContainer, args = bundle)
         }
     }
 }
