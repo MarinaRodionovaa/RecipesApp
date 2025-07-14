@@ -48,8 +48,7 @@
             android:layout_marginTop="@dimen/standard_margin"
             android:layout_marginBottom="@dimen/medium_margin"
             android:background="@drawable/shape_drawable"
-            android:text="@string/title_ingredient"
-            tools:text="ингредиенты" />
+            android:text="@string/title_ingredient" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,6 +84,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="@dimen/standard_margin"
             android:background="@drawable/shape_recipe_item"
+            android:paddingVertical="@dimen/small_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="9"
             tools:listitem="@layout/item_ingredient" />
@@ -96,8 +96,7 @@
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="@dimen/standard_margin"
-            android:text="@string/title_method"
-            tools:text="способ приготовления" />
+            android:text="@string/title_method" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMethod"
@@ -107,6 +106,7 @@
             android:layout_marginHorizontal="@dimen/standard_margin"
             android:background="@drawable/shape_recipe_item"
             android:backgroundTint="@color/white"
+            android:paddingVertical="@dimen/small_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/item_method" />

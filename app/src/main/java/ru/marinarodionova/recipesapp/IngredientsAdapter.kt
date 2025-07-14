@@ -15,23 +15,21 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
         private val binding = ItemIngredientBinding.bind(view)
         val titleTextView: TextView = binding.nameIngredient
         val countTextView: TextView = binding.countIngredient
-        val measureTextView: TextView = binding.measureIngredient
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
         val view = inflater.inflate(R.layout.item_ingredient, viewGroup, false)
         return ViewHolder(view)
-
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient: Ingredient = dataSet[position]
+        val countMeasure = "${ingredient.quantity} ${ingredient.unitOfMeasure}"
+
         with(viewHolder) {
             titleTextView.text = ingredient.description
-            countTextView.text = ingredient.quantity
-            measureTextView.text = ingredient.unitOfMeasure
-
+            countTextView.text = countMeasure
         }
     }
 

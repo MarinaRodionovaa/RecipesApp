@@ -11,7 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="@dimen/medium_padding"
+        android:paddingVertical="@dimen/half_margin"
+        android:paddingStart="@dimen/medium_padding"
         tools:text="Творог" />
 
     <TextView
@@ -19,18 +20,8 @@
         style="@style/StyleIngredient14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/medium_padding"
-        android:paddingEnd="@dimen/small_margin"
-        android:textAlignment="viewEnd"
-        tools:text="350" />
-
-    <TextView
-        android:id="@+id/measure_ingredient"
-        style="@style/StyleIngredient14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/medium_padding"
+        android:paddingVertical="@dimen/half_margin"
         android:paddingEnd="@dimen/medium_padding"
         android:textAlignment="viewEnd"
-        tools:text="Г" />
+        tools:text="350" />
 </LinearLayout>

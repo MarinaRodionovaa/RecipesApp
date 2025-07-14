@@ -32,10 +32,10 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable("ARG_RECIPE", Recipe::class.java)
+            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
         } else {
             @Suppress("DEPRECATION")
-            arguments?.getParcelable<Recipe>("ARG_RECIPE")
+            arguments?.getParcelable<Recipe>(ARG_RECIPE)
         }
         binding.tvRecipeTitle.text = recipe?.title
         initUI()
@@ -54,8 +54,8 @@ class RecipeFragment : Fragment() {
             dividerColor = ContextCompat.getColor(context, R.color.line_color)
             isLastItemDecorated = false
             dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-            dividerInsetStart = resources.getDimensionPixelOffset(R.dimen.divider_start_end)
-            dividerInsetEnd = resources.getDimensionPixelOffset(R.dimen.divider_start_end)
+            dividerInsetStart = resources.getDimensionPixelOffset(R.dimen.medium_padding)
+            dividerInsetEnd = resources.getDimensionPixelOffset(R.dimen.medium_padding)
         }
 
         binding.rvIngredients.addItemDecoration(divider)
@@ -73,5 +73,4 @@ class RecipeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
