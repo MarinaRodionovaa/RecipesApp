@@ -1,5 +1,6 @@
 package ru.marinarodionova.recipesapp
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
@@ -60,9 +62,22 @@ class RecipeFragment : Fragment() {
 
         binding.rvIngredients.addItemDecoration(divider)
         binding.rvMethod.addItemDecoration(divider)
+        binding.skCountPortion.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                ingredientsAdapter.updateIngredients(progress)
+                ingredientsAdapter.notifyDataSetChanged()
+                binding.tvPortionCount.text = progress.toString()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
     }
 
-    fun initUI() {
+    private fun initUI() {
         val inputStream: InputStream? =
             recipe?.imageUrl?.let { binding.ivRecipe.context?.assets?.open(it) }
         val drawable = Drawable.createFromStream(inputStream, null)

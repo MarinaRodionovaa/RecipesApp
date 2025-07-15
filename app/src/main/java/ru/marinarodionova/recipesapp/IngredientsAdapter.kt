@@ -10,6 +10,7 @@ import ru.marinarodionova.recipesapp.models.Ingredient
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
+    private var quantity = 1
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemIngredientBinding.bind(view)
@@ -24,8 +25,15 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val ingredient: Ingredient = dataSet[position]
-        val countMeasure = "${ingredient.quantity} ${ingredient.unitOfMeasure}"
+        val ingredient = dataSet[position]
+        val quantityFloat = ingredient.quantity.toFloatOrNull() ?: 0f
+        val result = quantityFloat * quantity
+        val countFormatted = if (result % 1f == 0f) {
+            result.toInt().toString()
+        } else {
+            String.format("%.1f", result)
+        }
+        val countMeasure = "$countFormatted ${ingredient.unitOfMeasure}"
 
         with(viewHolder) {
             titleTextView.text = ingredient.description
@@ -34,4 +42,8 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun updateIngredients(progress: Int) {
+        quantity = progress
+    }
 }
