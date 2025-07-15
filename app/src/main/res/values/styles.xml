@@ -28,6 +28,26 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="StyleIngredient14" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular_400</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/description_color</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="StyleMethod14" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular_400</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/description_color</item>
+    </style>
+
+    <style name="StylePortionCount16" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular_400</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/description_color</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="StyleNavButton" parent="Widget.Material3.Button">
         <item name="android:textAppearance">@style/StyleButtonTitle14</item>
         <item name="cornerRadius">@dimen/radius_small</item>

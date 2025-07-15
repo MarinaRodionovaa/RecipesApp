@@ -49,9 +49,9 @@ class RecipesListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        argCategoryId = requireArguments().getInt("ARG_CATEGORY_ID")
-        argCategoryName = requireArguments().getString("ARG_CATEGORY_NAME")
-        argCategoryImageUrl = requireArguments().getString("ARG_CATEGORY_IMAGE_URL")
+        argCategoryId = requireArguments().getInt(ARG_CATEGORY_ID)
+        argCategoryName = requireArguments().getString(ARG_CATEGORY_NAME)
+        argCategoryImageUrl = requireArguments().getString(ARG_CATEGORY_IMAGE_URL)
         binding.tvRecipeTitle.text = argCategoryName
 
         val inputStream: InputStream? =
@@ -64,7 +64,7 @@ class RecipesListFragment : Fragment() {
     fun openRecipeByRecipeId(recipeId: Int) {
         val recipe = STUB.getRecipeById(recipeId)
         val bundle = Bundle().apply {
-            putParcelable("ARG_RECIPE", recipe)
+            putParcelable(ARG_RECIPE, recipe)
         }
         parentFragmentManager.commit {
             setReorderingAllowed(true)
