@@ -9,9 +9,15 @@
     <dimen name="standard_margin">16dp</dimen>
     <dimen name="big_margin">20dp</dimen>
     <dimen name="radius_small">8dp</dimen>
+    <dimen name="radius_little">4dp</dimen>
+    <dimen name="radius_tiny">4dp</dimen>
     <dimen name="hdr_height">234dp</dimen>
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="card_category_height">130dp</dimen>
     <dimen name="card_recipe_height">100dp</dimen>
     <dimen name="divider_thickness">1dp</dimen>
+    <dimen name="thumb_height">30dp</dimen>
+    <dimen name="thumb_width">8dp</dimen>
+    <dimen name="seekbar_height">16dp</dimen>
+    <dimen name="seekbar_margin">5dp</dimen>
 </resources>

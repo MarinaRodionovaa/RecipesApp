@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.marinarodionova.recipesapp.databinding.ItemIngredientBinding
 import ru.marinarodionova.recipesapp.models.Ingredient
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
@@ -27,13 +28,11 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
-        val quantityBigDecimal = BigDecimal(ingredient.quantity)
-        val result = quantityBigDecimal.multiply(BigDecimal(quantity))
-        val countFormatted = if (result.remainder(BigDecimal.ONE) == BigDecimal.ZERO) {
-            result.toInt().toString()
-        } else {
-            String.format("%.1f", result)
-        }
+        val countFormatted = BigDecimal(ingredient.quantity)
+            .multiply(BigDecimal(quantity))
+            .setScale(1, RoundingMode.HALF_UP)
+            .stripTrailingZeros()
+            .toPlainString()
         val countMeasure = "$countFormatted ${ingredient.unitOfMeasure}"
 
         with(viewHolder) {
