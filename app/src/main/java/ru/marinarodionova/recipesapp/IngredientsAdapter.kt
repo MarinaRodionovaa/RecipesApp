@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.marinarodionova.recipesapp.databinding.ItemIngredientBinding
 import ru.marinarodionova.recipesapp.models.Ingredient
+import java.math.BigDecimal
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
@@ -26,9 +27,9 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
-        val quantityFloat = ingredient.quantity.toFloatOrNull() ?: 0f
-        val result = quantityFloat * quantity
-        val countFormatted = if (result % 1f == 0f) {
+        val quantityBigDecimal = BigDecimal(ingredient.quantity)
+        val result = quantityBigDecimal.multiply(BigDecimal(quantity))
+        val countFormatted = if (result.remainder(BigDecimal.ONE) == BigDecimal.ZERO) {
             result.toInt().toString()
         } else {
             String.format("%.1f", result)
