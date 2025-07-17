@@ -9,4 +9,6 @@
     <color name="title_color">#5F3678</color>
     <color name="description_color">#666666</color>
     <color name="line_color">#F5F5F5</color>
+    <color name="seekbar_color">#A1A9F9</color>
+    <color name="thumb_color">#525DC0</color>
 </resources>
