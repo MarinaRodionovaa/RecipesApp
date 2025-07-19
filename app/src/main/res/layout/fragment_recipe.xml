@@ -38,6 +38,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="Бургер с грибами и сыром" />
+
+            <ImageButton
+                android:id="@+id/ibHeart"
+                android:layout_width="@dimen/icon_heart_size"
+                android:layout_height="@dimen/icon_heart_size"
+                android:layout_marginTop="@dimen/icon_margin_horizontal"
+                android:layout_marginEnd="@dimen/icon_margin_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_heart" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -81,10 +94,10 @@
             style="@style/styleSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/standard_margin"
             android:layout_marginBottom="@dimen/standard_margin"
             android:max="5"
-            android:min="1" />
+            android:min="1"
+            android:paddingHorizontal="@dimen/standard_margin" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
