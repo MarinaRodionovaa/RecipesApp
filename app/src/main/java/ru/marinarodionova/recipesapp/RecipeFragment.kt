@@ -82,6 +82,11 @@ class RecipeFragment : Fragment() {
             recipe?.imageUrl?.let { binding.ivRecipe.context?.assets?.open(it) }
         val drawable = Drawable.createFromStream(inputStream, null)
         binding.ivRecipe.setImageDrawable(drawable)
+        binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+
+        binding.ibHeart.setOnClickListener {
+            binding.ibHeart.setImageResource(R.drawable.ic_heart)
+        }
     }
 
     override fun onDestroyView() {

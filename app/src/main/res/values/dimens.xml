@@ -19,4 +19,7 @@
     <dimen name="thumb_height">30dp</dimen>
     <dimen name="thumb_width">8dp</dimen>
     <dimen name="seekbar_height">16dp</dimen>
+    <dimen name="icon_heart_size">40dp</dimen>
+    <dimen name="icon_margin_horizontal">21dp</dimen>
+    <dimen name="icon_margin_vertical">19dp</dimen>
 </resources>
