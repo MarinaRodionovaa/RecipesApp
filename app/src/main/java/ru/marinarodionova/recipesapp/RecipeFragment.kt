@@ -1,6 +1,7 @@
 package ru.marinarodionova.recipesapp
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -15,9 +16,11 @@ import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 import ru.marinarodionova.recipesapp.models.Recipe
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import java.io.InputStream
+import androidx.core.content.edit
 
 class RecipeFragment : Fragment() {
     var recipe: Recipe? = null
+    var favoritesSet: HashSet<String>? = null
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding
@@ -82,15 +85,45 @@ class RecipeFragment : Fragment() {
             recipe?.imageUrl?.let { binding.ivRecipe.context?.assets?.open(it) }
         val drawable = Drawable.createFromStream(inputStream, null)
         binding.ivRecipe.setImageDrawable(drawable)
-        binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+
+        favoritesSet = getFavorites()
+        val recipeId = recipe?.id.toString()
+        if (favoritesSet?.any { it == recipeId } == true) {
+            binding.ibHeart.setImageResource(R.drawable.ic_heart)
+        } else {
+            binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+        }
 
         binding.ibHeart.setOnClickListener {
-            binding.ibHeart.setImageResource(R.drawable.ic_heart)
+            if (favoritesSet?.any { it == recipeId } == true) {
+                binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+                favoritesSet?.remove(recipeId)
+            } else {
+                binding.ibHeart.setImageResource(R.drawable.ic_heart)
+                favoritesSet?.add(recipeId)
+            }
+            saveFavorites(favoritesSet?.toSet() ?: emptySet())
+            favoritesSet = getFavorites()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun saveFavorites(favoritesSet: Set<String>) {
+        val sharedPrefs = context?.getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
+        sharedPrefs?.edit {
+            putStringSet(KEY_FAVORITES_SET, favoritesSet)
+        }
+    }
+
+    fun getFavorites(): HashSet<String> {
+        val sharedPrefs = context?.getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
+        val hashSetFavorites =
+            sharedPrefs?.getStringSet(KEY_FAVORITES_SET, emptySet())?.let { HashSet(it) }
+                ?: HashSet()
+        return hashSetFavorites
     }
 }

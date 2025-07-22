@@ -7,4 +7,6 @@
     <string name="title_method">Способ приготовления</string>
     <string name="title_portion">Порции:</string>
     <string name="number_of_portions">1</string>
+    <string name="description_favorite_btn">Добавить в избранное</string>
+    <string name="description_count_portion_seekbar">Выбор количества порций</string>
 </resources>
