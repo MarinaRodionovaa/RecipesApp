@@ -15,7 +15,7 @@ class RecipesListFragment : Fragment() {
     private var _binding: FragmentRecipesListBinding? = null
     private val binding
         get() = _binding
-            ?: throw IllegalStateException("Binding for ActivityLearnWordBinding must not be null")
+            ?: throw IllegalStateException("Binding for FragmentRecipeListBinding must not be null")
 
     private var argCategoryId: Int? = null
     private var argCategoryName: String? = null

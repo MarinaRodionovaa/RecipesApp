@@ -19,12 +19,12 @@ import java.io.InputStream
 import androidx.core.content.edit
 
 class RecipeFragment : Fragment() {
-    var recipe: Recipe? = null
-    var favoritesSet: HashSet<String>? = null
+    private var recipe: Recipe? = null
+    private var favoritesSet: HashSet<String>? = null
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding
-            ?: throw IllegalStateException("Binding for ActivityLearnWordBinding must not be null")
+            ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,20 +88,23 @@ class RecipeFragment : Fragment() {
 
         favoritesSet = getFavorites()
         val recipeId = recipe?.id.toString()
-        if (favoritesSet?.any { it == recipeId } == true) {
+        var isRecipeInSet = recipeId in favoritesSet.orEmpty()
+
+        if (isRecipeInSet) {
             binding.ibHeart.setImageResource(R.drawable.ic_heart)
         } else {
             binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
         }
 
         binding.ibHeart.setOnClickListener {
-            if (favoritesSet?.any { it == recipeId } == true) {
+            if (isRecipeInSet) {
                 binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
                 favoritesSet?.remove(recipeId)
             } else {
                 binding.ibHeart.setImageResource(R.drawable.ic_heart)
                 favoritesSet?.add(recipeId)
             }
+            isRecipeInSet = !isRecipeInSet
             saveFavorites(favoritesSet?.toSet() ?: emptySet())
             favoritesSet = getFavorites()
         }
@@ -113,17 +116,16 @@ class RecipeFragment : Fragment() {
     }
 
     fun saveFavorites(favoritesSet: Set<String>) {
-        val sharedPrefs = context?.getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
+        val sharedPrefs =
+            requireContext().getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
         sharedPrefs?.edit {
             putStringSet(KEY_FAVORITES_SET, favoritesSet)
         }
     }
 
     fun getFavorites(): HashSet<String> {
-        val sharedPrefs = context?.getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
-        val hashSetFavorites =
-            sharedPrefs?.getStringSet(KEY_FAVORITES_SET, emptySet())?.let { HashSet(it) }
-                ?: HashSet()
-        return hashSetFavorites
+        val sharedPrefs =
+            requireContext().getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
+        return HashSet(sharedPrefs?.getStringSet(KEY_FAVORITES_SET, emptySet()) ?: emptySet())
     }
 }
