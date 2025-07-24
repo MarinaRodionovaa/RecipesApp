@@ -40,11 +40,11 @@
                 tools:text="Бургер с грибами и сыром" />
 
             <ImageButton
+                android:contentDescription="@string/description_favorite_btn"
                 android:id="@+id/ibHeart"
                 android:layout_width="@dimen/icon_heart_size"
                 android:layout_height="@dimen/icon_heart_size"
-                android:layout_marginTop="@dimen/icon_margin_horizontal"
-                android:layout_marginEnd="@dimen/icon_margin_vertical"
+                android:layout_margin="@dimen/standard_margin"
                 android:background="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,6 +90,7 @@
         </LinearLayout>
 
         <SeekBar
+            android:contentDescription="@string/description_count_portion_seekbar"
             android:id="@+id/skCountPortion"
             style="@style/styleSeekBar"
             android:layout_width="match_parent"
