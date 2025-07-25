@@ -51,7 +51,7 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
             val drawable = Drawable.createFromStream(inputStream, null)
             imageView.setImageDrawable(drawable)
             itemView.setOnClickListener {
-                itemClickListener?.onItemClick(recipeId = position)
+                itemClickListener?.onItemClick(recipeId = recipe.id)
             }
         }
 
