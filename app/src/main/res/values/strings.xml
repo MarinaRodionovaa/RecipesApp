@@ -9,4 +9,5 @@
     <string name="number_of_portions">1</string>
     <string name="description_favorite_btn">Добавить в избранное</string>
     <string name="description_count_portion_seekbar">Выбор количества порций</string>
+    <string name="information_message_favorite_list">Вы еще не добавили ни одного\n рецепта в избранное</string>
 </resources>
