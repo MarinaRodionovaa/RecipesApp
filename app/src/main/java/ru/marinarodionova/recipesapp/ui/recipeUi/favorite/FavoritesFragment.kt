@@ -1,4 +1,4 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.ui.recipeUi.favorite
 
 import android.content.Context
 import android.os.Bundle
@@ -8,8 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import ru.marinarodionova.recipesapp.ARG_RECIPE
+import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
+import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
+import ru.marinarodionova.recipesapp.R
+import ru.marinarodionova.recipesapp.STUB
 import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
 import ru.marinarodionova.recipesapp.models.Recipe
+import ru.marinarodionova.recipesapp.ui.recipeUi.recipe.RecipeFragment
+import ru.marinarodionova.recipesapp.ui.recipeUi.resipeList.RecipesListAdapter
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null

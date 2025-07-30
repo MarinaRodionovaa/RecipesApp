@@ -1,4 +1,4 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -8,7 +8,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.add
 import androidx.fragment.app.replace
+import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.ActivityMainBinding
+import ru.marinarodionova.recipesapp.ui.category.CategoriesListFragment
+import ru.marinarodionova.recipesapp.ui.recipeUi.favorite.FavoritesFragment
 
 class MainActivity : AppCompatActivity() {
 

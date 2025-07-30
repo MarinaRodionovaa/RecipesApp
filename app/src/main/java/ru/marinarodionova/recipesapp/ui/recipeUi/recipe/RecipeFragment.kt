@@ -1,4 +1,4 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.ui.recipeUi.recipe
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,6 +17,10 @@ import ru.marinarodionova.recipesapp.models.Recipe
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import java.io.InputStream
 import androidx.core.content.edit
+import ru.marinarodionova.recipesapp.ARG_RECIPE
+import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
+import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
+import ru.marinarodionova.recipesapp.R
 
 class RecipeFragment : Fragment() {
     private var recipe: Recipe? = null

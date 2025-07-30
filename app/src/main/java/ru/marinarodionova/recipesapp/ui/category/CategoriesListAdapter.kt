@@ -1,4 +1,4 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.ui.category
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.models.Category
 import java.io.InputStream
 import ru.marinarodionova.recipesapp.databinding.ItemCategoryBinding

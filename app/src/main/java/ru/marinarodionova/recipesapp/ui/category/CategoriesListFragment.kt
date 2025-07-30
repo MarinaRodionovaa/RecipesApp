@@ -1,4 +1,4 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.ui.category
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import ru.marinarodionova.recipesapp.ARG_CATEGORY_ID
+import ru.marinarodionova.recipesapp.ARG_CATEGORY_IMAGE_URL
+import ru.marinarodionova.recipesapp.ARG_CATEGORY_NAME
+import ru.marinarodionova.recipesapp.R
+import ru.marinarodionova.recipesapp.STUB
 import ru.marinarodionova.recipesapp.databinding.FragmentCategoriesListBinding
+import ru.marinarodionova.recipesapp.ui.recipeUi.resipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
