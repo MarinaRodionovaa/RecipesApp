@@ -1,10 +1,11 @@
-package ru.marinarodionova.recipesapp
+package ru.marinarodionova.recipesapp.ui.recipeUi.recipe
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.ItemIngredientBinding
 import ru.marinarodionova.recipesapp.models.Ingredient
 import java.math.BigDecimal
