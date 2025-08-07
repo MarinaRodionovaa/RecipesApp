@@ -17,7 +17,6 @@ import java.io.InputStream
 import androidx.fragment.app.viewModels
 import ru.marinarodionova.recipesapp.ARG_RECIPE
 import ru.marinarodionova.recipesapp.R
-import ru.marinarodionova.recipesapp.STUB
 
 class RecipeFragment : Fragment() {
     private var recipeId: Int? = null
@@ -47,11 +46,31 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val recipe = recipeId?.let { STUB.getRecipeById(it) } ?: return
-        val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
-        val methodAdapter = MethodAdapter(recipe.method)
-        binding.rvIngredients.adapter = ingredientsAdapter
-        binding.rvMethod.adapter = methodAdapter
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            val ingredientsAdapter = IngredientsAdapter(state.ingredientList.filterNotNull())
+            val methodAdapter = MethodAdapter(state.method.filterNotNull())
+            binding.rvIngredients.adapter = ingredientsAdapter
+            binding.rvMethod.adapter = methodAdapter
+            binding.skCountPortion.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    ingredientsAdapter.updateIngredients(progress)
+                    ingredientsAdapter.notifyDataSetChanged()
+                    binding.tvPortionCount.text = progress.toString()
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
+        }
 
         val context = context ?: return
         val divider = MaterialDividerItemDecoration(context, VERTICAL).apply {
@@ -64,20 +83,6 @@ class RecipeFragment : Fragment() {
 
         binding.rvIngredients.addItemDecoration(divider)
         binding.rvMethod.addItemDecoration(divider)
-        binding.skCountPortion.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                ingredientsAdapter.updateIngredients(progress)
-                ingredientsAdapter.notifyDataSetChanged()
-                binding.tvPortionCount.text = progress.toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
     }
 
     private fun initUI() {
@@ -95,13 +100,7 @@ class RecipeFragment : Fragment() {
             binding.skCountPortion.progress = state.portionCount
 
             binding.ibHeart.setOnClickListener {
-                if (state.isFavorite == true) {
-                    binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
-                    viewModel.onFavoritesClicked()
-                } else {
-                    binding.ibHeart.setImageResource(R.drawable.ic_heart)
-                    viewModel.onFavoritesClicked()
-                }
+                viewModel.onFavoritesClicked(binding)
             }
         }
     }
