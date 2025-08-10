@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
@@ -17,7 +18,7 @@ import ru.marinarodionova.recipesapp.models.Ingredient
 data class RecipeState(
     val recipeId: Int? = null,
     val recipeName: String? = null,
-    val recipeImg: String? = null,
+    val recipeImg: Drawable? = null,
     val method: List<String?> = listOf(null),
     val ingredientList: List<Ingredient?> = listOf(null),
     val portionCount: Int = 1,
@@ -44,12 +45,22 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val recipeState = oldState.copy(
             recipeId = recipeId,
             recipeName = recipe?.title,
-            recipeImg = recipe?.imageUrl,
             method = recipe?.method ?: listOf(null),
             ingredientList = recipe?.ingredients ?: listOf(null),
             portionCount = currentPortionCount,
-            isFavorite = isRecipeInSet
+            isFavorite = isRecipeInSet,
+            recipeImg = try {
+                recipe?.imageUrl?.let { img ->
+                    getApplication<Application>().assets.open(img).use { inputStream ->
+                        Drawable.createFromStream(inputStream, null)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("!!!", "Image not found ${recipe?.imageUrl}")
+                null
+            }
         )
+
         _state.value = recipeState
     }
 

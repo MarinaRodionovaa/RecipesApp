@@ -1,7 +1,6 @@
 package ru.marinarodionova.recipesapp.ui.recipeUi.recipe
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import java.io.InputStream
 import androidx.fragment.app.viewModels
 import ru.marinarodionova.recipesapp.ARG_RECIPE
 import ru.marinarodionova.recipesapp.R
@@ -88,10 +86,7 @@ class RecipeFragment : Fragment() {
     private fun initUI() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.tvRecipeTitle.text = state.recipeName
-            val inputStream: InputStream? =
-                state.recipeImg?.let { binding.ivRecipe.context?.assets?.open(it) }
-            val drawable = Drawable.createFromStream(inputStream, null)
-            binding.ivRecipe.setImageDrawable(drawable)
+            binding.ivRecipe.setImageDrawable(state.recipeImg)
             val isFavorite = state.isFavorite ?: false
             binding.ibHeart.setImageResource(
                 if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
