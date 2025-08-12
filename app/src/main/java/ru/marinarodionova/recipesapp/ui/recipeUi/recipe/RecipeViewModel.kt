@@ -97,4 +97,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             putStringSet(KEY_FAVORITES_SET, favoritesSet)
         }
     }
+
+    fun updatePortionCount(count: Int) {
+        val oldState = _state.value ?: return
+        val recipeState = oldState.copy(portionCount = count)
+        _state.value = recipeState
+    }
 }

@@ -40,51 +40,18 @@ class RecipeFragment : Fragment() {
         recipeId = arguments?.getInt(ARG_RECIPE)
         viewModel.loadRecipe(recipeId ?: return)
         initUI()
-        initRecycler()
-    }
-
-    private fun initRecycler() {
-        viewModel.state.observe(viewLifecycleOwner) { state ->
-            val ingredientsAdapter = IngredientsAdapter(state.ingredientList.filterNotNull())
-            val methodAdapter = MethodAdapter(state.method.filterNotNull())
-            binding.rvIngredients.adapter = ingredientsAdapter
-            binding.rvMethod.adapter = methodAdapter
-            binding.skCountPortion.setOnSeekBarChangeListener(object :
-                SeekBar.OnSeekBarChangeListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    ingredientsAdapter.updateIngredients(progress)
-                    ingredientsAdapter.notifyDataSetChanged()
-                    binding.tvPortionCount.text = progress.toString()
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                }
-            })
-        }
-
-        val context = context ?: return
-        val divider = MaterialDividerItemDecoration(context, VERTICAL).apply {
-            dividerColor = ContextCompat.getColor(context, R.color.line_color)
-            isLastItemDecorated = false
-            dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-            dividerInsetStart = resources.getDimensionPixelOffset(R.dimen.medium_padding)
-            dividerInsetEnd = resources.getDimensionPixelOffset(R.dimen.medium_padding)
-        }
-
-        binding.rvIngredients.addItemDecoration(divider)
-        binding.rvMethod.addItemDecoration(divider)
     }
 
     private fun initUI() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
+
+            val ingredientsAdapter = IngredientsAdapter(state.ingredientList.filterNotNull())
+            ingredientsAdapter.updateIngredients(state.portionCount)
+            binding.rvIngredients.adapter = ingredientsAdapter
+
+            val methodAdapter = MethodAdapter(state.method.filterNotNull())
+            binding.rvMethod.adapter = methodAdapter
+
             binding.tvRecipeTitle.text = state.recipeName
             binding.ivRecipe.setImageDrawable(state.recipeImg)
             val isFavorite = state.isFavorite ?: false
@@ -98,6 +65,36 @@ class RecipeFragment : Fragment() {
                 viewModel.onFavoritesClicked(binding)
             }
         }
+
+        binding.skCountPortion.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                viewModel.updatePortionCount(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+
+        val context = context ?: return
+        val divider = MaterialDividerItemDecoration(context, VERTICAL).apply {
+            dividerColor = ContextCompat.getColor(context, R.color.line_color)
+            isLastItemDecorated = false
+            dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+            dividerInsetStart = resources.getDimensionPixelOffset(R.dimen.medium_padding)
+            dividerInsetEnd = resources.getDimensionPixelOffset(R.dimen.medium_padding)
+        }
+
+        binding.rvIngredients.addItemDecoration(divider)
+        binding.rvMethod.addItemDecoration(divider)
     }
 
     override fun onDestroyView() {
