@@ -43,13 +43,14 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
+        val ingredientsAdapter = IngredientsAdapter(emptyList())
+        val methodAdapter = MethodAdapter(emptyList())
         viewModel.state.observe(viewLifecycleOwner) { state ->
-
-            val ingredientsAdapter = IngredientsAdapter(state.ingredientList.filterNotNull())
+            ingredientsAdapter.setIngredients(state.ingredientList.filterNotNull())
             ingredientsAdapter.updateIngredients(state.portionCount)
             binding.rvIngredients.adapter = ingredientsAdapter
 
-            val methodAdapter = MethodAdapter(state.method.filterNotNull())
+            methodAdapter.setMethod(state.method.filterNotNull())
             binding.rvMethod.adapter = methodAdapter
 
             binding.tvRecipeTitle.text = state.recipeName
@@ -62,7 +63,7 @@ class RecipeFragment : Fragment() {
             binding.skCountPortion.progress = state.portionCount
 
             binding.ibHeart.setOnClickListener {
-                viewModel.onFavoritesClicked(binding)
+                viewModel.onFavoritesClicked()
             }
         }
 
