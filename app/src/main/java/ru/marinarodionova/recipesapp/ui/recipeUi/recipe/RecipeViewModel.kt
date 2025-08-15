@@ -10,9 +10,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
 import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
-import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.STUB
-import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 import ru.marinarodionova.recipesapp.models.Ingredient
 
 data class RecipeState(
@@ -73,14 +71,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         return HashSet(sharedPrefs.getStringSet(KEY_FAVORITES_SET, emptySet()) ?: emptySet())
     }
 
-    fun onFavoritesClicked(binding: FragmentRecipeBinding) {
+    fun onFavoritesClicked() {
         val isFavorite = state.value?.isFavorite ?: return
         if (isFavorite) {
             favoritesSet?.remove(state.value?.recipeId.toString())
-            binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
         } else {
             favoritesSet?.add(state.value?.recipeId.toString())
-            binding.ibHeart.setImageResource(R.drawable.ic_heart)
         }
         _state.value = state.value?.copy(isFavorite = !isFavorite)
         saveFavorites(favoritesSet?.toSet() ?: emptySet())
@@ -96,5 +92,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         sharedPrefs?.edit {
             putStringSet(KEY_FAVORITES_SET, favoritesSet)
         }
+    }
+
+    fun updatePortionCount(count: Int) {
+        val oldState = _state.value ?: return
+        val recipeState = oldState.copy(portionCount = count)
+        _state.value = recipeState
     }
 }

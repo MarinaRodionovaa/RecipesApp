@@ -40,35 +40,50 @@ class RecipeFragment : Fragment() {
         recipeId = arguments?.getInt(ARG_RECIPE)
         viewModel.loadRecipe(recipeId ?: return)
         initUI()
-        initRecycler()
     }
 
-    private fun initRecycler() {
+    private fun initUI() {
+        val ingredientsAdapter = IngredientsAdapter(emptyList())
+        val methodAdapter = MethodAdapter(emptyList())
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            val ingredientsAdapter = IngredientsAdapter(state.ingredientList.filterNotNull())
-            val methodAdapter = MethodAdapter(state.method.filterNotNull())
+            ingredientsAdapter.setIngredients(state.ingredientList.filterNotNull())
+            ingredientsAdapter.updateIngredients(state.portionCount)
             binding.rvIngredients.adapter = ingredientsAdapter
+
+            methodAdapter.setMethod(state.method.filterNotNull())
             binding.rvMethod.adapter = methodAdapter
-            binding.skCountPortion.setOnSeekBarChangeListener(object :
-                SeekBar.OnSeekBarChangeListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    ingredientsAdapter.updateIngredients(progress)
-                    ingredientsAdapter.notifyDataSetChanged()
-                    binding.tvPortionCount.text = progress.toString()
-                }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                }
+            binding.tvRecipeTitle.text = state.recipeName
+            binding.ivRecipe.setImageDrawable(state.recipeImg)
+            val isFavorite = state.isFavorite ?: false
+            binding.ibHeart.setImageResource(
+                if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
+            )
+            binding.tvPortionCount.text = state.portionCount.toString()
+            binding.skCountPortion.progress = state.portionCount
 
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                }
-            })
+            binding.ibHeart.setOnClickListener {
+                viewModel.onFavoritesClicked()
+            }
         }
+
+        binding.skCountPortion.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                viewModel.updatePortionCount(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
 
         val context = context ?: return
         val divider = MaterialDividerItemDecoration(context, VERTICAL).apply {
@@ -81,23 +96,6 @@ class RecipeFragment : Fragment() {
 
         binding.rvIngredients.addItemDecoration(divider)
         binding.rvMethod.addItemDecoration(divider)
-    }
-
-    private fun initUI() {
-        viewModel.state.observe(viewLifecycleOwner) { state ->
-            binding.tvRecipeTitle.text = state.recipeName
-            binding.ivRecipe.setImageDrawable(state.recipeImg)
-            val isFavorite = state.isFavorite ?: false
-            binding.ibHeart.setImageResource(
-                if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
-            )
-            binding.tvPortionCount.text = state.portionCount.toString()
-            binding.skCountPortion.progress = state.portionCount
-
-            binding.ibHeart.setOnClickListener {
-                viewModel.onFavoritesClicked(binding)
-            }
-        }
     }
 
     override fun onDestroyView() {
