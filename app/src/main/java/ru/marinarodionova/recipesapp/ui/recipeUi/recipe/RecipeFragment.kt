@@ -1,6 +1,5 @@
 package ru.marinarodionova.recipesapp.ui.recipeUi.recipe
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +14,18 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.fragment.app.viewModels
 import ru.marinarodionova.recipesapp.ARG_RECIPE
 import ru.marinarodionova.recipesapp.R
+
+class PortionSeekBarListener(
+    private val onChangeIngredients: (Int) -> Unit
+) : SeekBar.OnSeekBarChangeListener {
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        onChangeIngredients(progress)
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+}
 
 class RecipeFragment : Fragment() {
     private var recipeId: Int? = null
@@ -67,23 +78,10 @@ class RecipeFragment : Fragment() {
             }
         }
 
-        binding.skCountPortion.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
+        binding.skCountPortion.setOnSeekBarChangeListener(
+            PortionSeekBarListener { progress ->
                 viewModel.updatePortionCount(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
+            })
 
         val context = context ?: return
         val divider = MaterialDividerItemDecoration(context, VERTICAL).apply {
