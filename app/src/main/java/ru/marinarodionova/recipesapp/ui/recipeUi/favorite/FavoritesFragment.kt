@@ -1,6 +1,5 @@
 package ru.marinarodionova.recipesapp.ui.recipeUi.favorite
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import ru.marinarodionova.recipesapp.ARG_RECIPE
-import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
-import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
 import ru.marinarodionova.recipesapp.R
-import ru.marinarodionova.recipesapp.STUB
 import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
 import ru.marinarodionova.recipesapp.models.Recipe
 import ru.marinarodionova.recipesapp.ui.recipeUi.recipe.RecipeFragment
@@ -23,6 +20,7 @@ class FavoritesFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentFavoriteBinding must not be null")
+    private val viewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,25 +36,27 @@ class FavoritesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initRecycler()
+        viewModel.loadRecipeList()
+        initUI()
     }
 
-    private fun initRecycler() {
-        val favoritesList = getFavorites()
-        val dataSet: List<Recipe> = STUB.getRecipesById(favoritesList)
-        if (dataSet.isEmpty()) {
-            binding.clInformationMessage.visibility = View.VISIBLE
-        } else {
-            val recipesListAdapter = RecipesListAdapter(dataSet)
-            binding.rvRecipe.adapter = recipesListAdapter
-
-            recipesListAdapter.setOnItemClickListener(object :
-                RecipesListAdapter.OnItemClickListener {
-                override fun onItemClick(recipeId: Int) {
-                    openRecipeByRecipeId(recipeId)
+    private fun initUI() {
+        val recipesListAdapter = RecipesListAdapter(emptyList())
+        binding.rvRecipe.adapter = recipesListAdapter
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            val dataSet: List<Recipe>? = state.recipeList
+            if (dataSet == null) {
+                binding.clInformationMessage.visibility = View.VISIBLE
+            } else {
+                recipesListAdapter.setRecipeList(dataSet)
+                recipesListAdapter.setOnItemClickListener(object :
+                    RecipesListAdapter.OnItemClickListener {
+                    override fun onItemClick(recipeId: Int) {
+                        openRecipeByRecipeId(recipeId)
+                    }
                 }
+                )
             }
-            )
         }
     }
 
@@ -68,12 +68,5 @@ class FavoritesFragment : Fragment() {
             setReorderingAllowed(true)
             replace<RecipeFragment>(R.id.mainFragmentContainer, args = bundle)
         }
-    }
-
-    fun getFavorites(): HashSet<Int> {
-        val sharedPrefs =
-            requireContext().getSharedPreferences(FAVORITES_PREFS_NAME, Context.MODE_PRIVATE)
-        val stringSet = sharedPrefs.getStringSet(KEY_FAVORITES_SET, emptySet()) ?: emptySet()
-        return stringSet.mapNotNull { it.toIntOrNull() }.toHashSet()
     }
 }

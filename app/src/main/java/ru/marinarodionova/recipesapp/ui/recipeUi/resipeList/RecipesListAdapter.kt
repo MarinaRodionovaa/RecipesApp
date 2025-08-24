@@ -13,14 +13,14 @@ import ru.marinarodionova.recipesapp.models.Recipe
 import java.io.InputStream
 import ru.marinarodionova.recipesapp.databinding.ItemRecipeBinding
 
-class RecipesListAdapter(private val dataSet: List<Recipe>) :
+class RecipesListAdapter(var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(recipeId: Int)
     }
 
-    var itemClickListener: OnItemClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
@@ -59,4 +59,8 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun setRecipeList(recipeList: List<Recipe>) {
+        dataSet = recipeList
+    }
 }

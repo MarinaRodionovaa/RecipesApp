@@ -274,6 +274,10 @@ object STUB {
         } else listOf()
     }
 
+    fun getCategoryByCategoryId(categoryId: Int): Category? {
+        return categories.find { it.id == categoryId }
+    }
+
     fun getRecipeById(recipeId: Int): Recipe? {
         return burgerRecipes.find { it.id == recipeId }
     }

@@ -13,7 +13,7 @@ import ru.marinarodionova.recipesapp.models.Category
 import java.io.InputStream
 import ru.marinarodionova.recipesapp.databinding.ItemCategoryBinding
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(var dataSet: List<Category>) :
 
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
@@ -21,7 +21,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         fun onItemClick(categoryId: Int)
     }
 
-    var itemClickListener: OnItemClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
@@ -59,6 +59,10 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             itemClickListener?.onItemClick(categoryId = position)
         }
 
+    }
+
+    fun setCategories(categories: List<Category>){
+        dataSet = categories
     }
 
     override fun getItemCount() = dataSet.size

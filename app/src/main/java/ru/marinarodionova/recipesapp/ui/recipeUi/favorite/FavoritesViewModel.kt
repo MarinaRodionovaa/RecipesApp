@@ -1,0 +1,46 @@
+package ru.marinarodionova.recipesapp.ui.recipeUi.favorite
+
+import android.app.Application
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
+import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
+import ru.marinarodionova.recipesapp.STUB
+import ru.marinarodionova.recipesapp.models.Recipe
+
+data class FavoritesState(
+    val recipeList: List<Recipe>? = null
+)
+
+class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
+    private val _state = MutableLiveData(FavoritesState())
+    val state: LiveData<FavoritesState> get() = _state
+
+    init {
+        Log.d("!!!!", "Инициализация ViewModel и обновление")
+    }
+
+    fun loadRecipeList() {
+        //TODO: load from network
+        val oldState = _state.value ?: return
+
+        val recipeList = STUB.getRecipesById(getFavorites().map { it.toInt() }.toSet())
+        val categoriesState = oldState.copy(
+            recipeList = recipeList,
+        )
+
+        _state.value = categoriesState
+    }
+
+    private fun getFavorites(): HashSet<String> {
+        val sharedPrefs =
+            getApplication<Application>().getSharedPreferences(
+                FAVORITES_PREFS_NAME,
+                Context.MODE_PRIVATE
+            )
+        return HashSet(sharedPrefs.getStringSet(KEY_FAVORITES_SET, emptySet()) ?: emptySet())
+    }
+}
