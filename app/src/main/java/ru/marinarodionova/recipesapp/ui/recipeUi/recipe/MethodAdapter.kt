@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private var dataSet: List<String>) :
+class MethodAdapter(var dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
