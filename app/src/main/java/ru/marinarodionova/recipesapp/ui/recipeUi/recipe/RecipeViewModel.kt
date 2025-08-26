@@ -25,8 +25,8 @@ data class RecipeState(
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
     private var favoritesSet: HashSet<String>? = null
-    private val _state = MutableLiveData<RecipeState>(RecipeState())
-    val currentPortionCount = _state.value?.portionCount ?: 1
+    private val _state = MutableLiveData(RecipeState())
+    private val currentPortionCount = _state.value?.portionCount ?: 1
     val state: LiveData<RecipeState> get() = _state
 
     init {
