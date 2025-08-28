@@ -5,13 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import ru.marinarodionova.recipesapp.ARG_CATEGORY_ID
 import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.FragmentCategoriesListBinding
-import ru.marinarodionova.recipesapp.ui.recipeUi.resipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
@@ -58,9 +56,6 @@ class CategoriesListFragment : Fragment() {
         val bundle = Bundle().apply {
             putInt(ARG_CATEGORY_ID, categoryId)
         }
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<RecipesListFragment>(R.id.mainFragmentContainer, args = bundle)
-        }
+        findNavController().navigate(R.id.recipesListFragment, bundle)
     }
 }
