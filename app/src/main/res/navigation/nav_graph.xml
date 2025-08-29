@@ -9,20 +9,64 @@
         android:id="@+id/categoriesListFragment"
         android:name="ru.marinarodionova.recipesapp.ui.category.CategoriesListFragment"
         android:label="fragment_categories_list"
-        tools:layout="@layout/fragment_categories_list" />
+        tools:layout="@layout/fragment_categories_list" >
+        <action
+            android:id="@+id/recipeListAction"
+            app:destination="@id/recipesListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_categoriesListFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/recipesListFragment"
         android:name="ru.marinarodionova.recipesapp.ui.recipeUi.resipeList.RecipesListFragment"
         android:label="RecipesListFragment"
-        tools:layout="@layout/fragment_recipes_list"/>
+        tools:layout="@layout/fragment_recipes_list">
+        <action
+            android:id="@+id/recipeAction"
+            app:destination="@id/recipeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="category"
+            app:argType="ru.marinarodionova.recipesapp.models.Category" />
+    </fragment>
     <fragment
         android:id="@+id/recipeFragment"
         android:name="ru.marinarodionova.recipesapp.ui.recipeUi.recipe.RecipeFragment"
         android:label="RecipeFragment"
-        tools:layout="@layout/fragment_recipe"/>
+        tools:layout="@layout/fragment_recipe">
+        <argument android:name="recipeId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="ru.marinarodionova.recipesapp.ui.recipeUi.favorite.FavoritesFragment"
         android:label="FavoritesFragment"
-        tools:layout="@layout/fragment_favorites"/>
+        tools:layout="@layout/fragment_favorites">
+        <action
+            android:id="@+id/favoritesFragmentAction"
+            app:destination="@id/recipeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_categoriesListFragment"
+            app:destination="@id/categoriesListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>

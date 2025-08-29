@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.marinarodionova.recipesapp.STUB
+import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
 
 data class RecipesListState(
@@ -24,23 +25,22 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         Log.d("!!!!", "Инициализация ViewModel и обновление")
     }
 
-    fun loadRecipeList(categoryId: Int) {
+    fun loadRecipeList(category: Category) {
         //TODO: load from network
-        val category = STUB.getCategoryByCategoryId(categoryId)
-        val recipeList = STUB.getRecipesByCategoryId(categoryId)
+        val recipeList = STUB.getRecipesByCategoryId(category.id)
         val oldState = _state.value ?: return
         val categoriesState = oldState.copy(
             recipeList = recipeList,
-            categoryId = category?.id,
-            categoryName = category?.title,
+            categoryId = category.id,
+            categoryName = category.title,
             imageUrl = try {
-                category?.imageUrl?.let { img ->
+                category.imageUrl.let { img ->
                     getApplication<Application>().assets.open(img).use { inputStream ->
                         Drawable.createFromStream(inputStream, null)
                     }
                 }
             } catch (e: Exception) {
-                Log.d("!!!", "Image not found ${category?.imageUrl}")
+                Log.d("!!!", "Image not found ${category.imageUrl}")
                 null
             }
         )

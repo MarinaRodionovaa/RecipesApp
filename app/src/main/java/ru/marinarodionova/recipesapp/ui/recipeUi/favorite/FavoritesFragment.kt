@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.marinarodionova.recipesapp.ARG_RECIPE
-import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
 import ru.marinarodionova.recipesapp.models.Recipe
 import ru.marinarodionova.recipesapp.ui.recipeUi.resipeList.RecipesListAdapter
@@ -59,9 +57,7 @@ class FavoritesFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_RECIPE, recipeId)
-        }
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        val action = FavoritesFragmentDirections.favoritesFragmentAction(recipeId)
+        findNavController().navigate(action)
     }
 }

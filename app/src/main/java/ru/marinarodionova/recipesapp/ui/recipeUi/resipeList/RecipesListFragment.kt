@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.marinarodionova.recipesapp.ARG_CATEGORY_ID
-import ru.marinarodionova.recipesapp.ARG_RECIPE
-import ru.marinarodionova.recipesapp.R
+import androidx.navigation.fragment.navArgs
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipesListBinding
+import ru.marinarodionova.recipesapp.models.Category
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentRecipesListBinding? = null
@@ -18,8 +17,8 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeListBinding must not be null")
     private val viewModel: RecipesListViewModel by viewModels()
-
-    private var argCategoryId: Int? = null
+    private val args: RecipesListFragmentArgs by navArgs()
+    private var argCategory: Category? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,15 +51,13 @@ class RecipesListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        argCategoryId = requireArguments().getInt(ARG_CATEGORY_ID)
-        viewModel.loadRecipeList(argCategoryId ?: return)
+        argCategory = args.category
+        viewModel.loadRecipeList(argCategory ?: return)
         initUI()
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_RECIPE, recipeId)
-        }
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        val action = RecipesListFragmentDirections.recipeAction(recipeId)
+        findNavController().navigate(action)
     }
 }
