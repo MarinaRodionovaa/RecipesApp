@@ -12,7 +12,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.fragment.app.viewModels
-import ru.marinarodionova.recipesapp.ARG_RECIPE
+import androidx.navigation.fragment.navArgs
 import ru.marinarodionova.recipesapp.R
 
 class PortionSeekBarListener(
@@ -34,6 +34,7 @@ class RecipeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
     private val viewModel: RecipeViewModel by viewModels()
+    val args: RecipeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +49,7 @@ class RecipeFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             Log.d("!!!!", state.isFavorite.toString())
         }
-        recipeId = arguments?.getInt(ARG_RECIPE)
+        recipeId = args.recipeId
         viewModel.loadRecipe(recipeId ?: return)
         initUI()
     }
