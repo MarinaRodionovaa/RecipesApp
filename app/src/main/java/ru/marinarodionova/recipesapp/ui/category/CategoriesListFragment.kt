@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.marinarodionova.recipesapp.ARG_CATEGORY_ID
-import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.FragmentCategoriesListBinding
+import ru.marinarodionova.recipesapp.models.Category
 
 class CategoriesListFragment : Fragment() {
 
@@ -46,16 +45,14 @@ class CategoriesListFragment : Fragment() {
         }
         categoriesListAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
+            override fun onItemClick(category: Category) {
+                openRecipesByCategoryId(category)
             }
         })
     }
 
-    fun openRecipesByCategoryId(categoryId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_CATEGORY_ID, categoryId)
-        }
-        findNavController().navigate(R.id.recipesListFragment, bundle)
+    fun openRecipesByCategoryId(category: Category) {
+        val action = CategoriesListFragmentDirections.recipeListAction(category)
+        findNavController().navigate(action)
     }
 }
