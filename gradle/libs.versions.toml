@@ -9,11 +9,13 @@ espressoCore = "3.5.1"
 appcompat = "1.6.1"
 kotlinxSerializationJson = "1.7.3"
 kotlinxSerializationJsonVersion = "1.6.3"
+loggingInterceptor = "4.12.0"
 material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 fragment = "1.8.8"
 navigationCompose = "2.9.3"
+okhttp = "4.12.0"
 recyclerview = "1.4.0"
 constraintlayoutVersion = "2.2.1"
 
@@ -31,6 +33,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-serialization-json-v163 = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -38,6 +41,7 @@ fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayoutVersion" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

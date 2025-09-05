@@ -8,14 +8,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.ActivityMainBinding
-import java.util.concurrent.Executors
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,36 +25,49 @@ class MainActivity : AppCompatActivity() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for MainActivityBinding must not be null")
-    val executor = Executors.newFixedThreadPool(10)
-    var categoryIdList: List<Int> = listOf()
-    var recipesList: List<List<Recipe>> = listOf()
+    private val executor = Executors.newFixedThreadPool(10)
+    private var categoryIdList: List<Int>? = listOf()
+    private var recipesList: List<List<Recipe>?>? = listOf()
+    private val logging = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+    private val client = OkHttpClient.Builder().addInterceptor(logging).build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("!!!!", "Метод onCreate() выполняется на потоке: ${Thread.currentThread().getName()}")
         _binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+
         val getCategories = executor.submit(Callable {
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.content
-            val categories = connection.inputStream.bufferedReader().readText()
-            connection.disconnect()
+            val categories: String?
+            val request =
+                Request.Builder().url("https://recipes.androidsprint.ru/api/category").build()
+            client.newCall(request).execute().use { response ->
+                categories = response.body?.string()
+                Log.i("!!!!", "response: $response")
+                response.close()
+            }
             Log.i("!!!!", "Body: $categories")
-            Log.i("!!!!", "Выполняю запрос на потоке: ${Thread.currentThread().getName()}")
-            val categoryList: List<Category> = Json.decodeFromString(categories)
-            categoryIdList = categoryList.map { it.id }
+            Log.i("!!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+
+            val categoryList: List<Category>? = categories?.let { Json.decodeFromString(it) }
+            categoryIdList = categoryList?.map { it.id }
         })
 
         getCategories.get()
         executor.execute {
-            recipesList = categoryIdList.map {
-                val urlRecipe = URL("https://recipes.androidsprint.ru/api/category/${it}/recipes")
-                val connectionRecipe = urlRecipe.openConnection() as HttpURLConnection
-                val recipes = connectionRecipe.inputStream.bufferedReader().readText()
-                val recipesListJson: List<Recipe> = Json.decodeFromString(recipes)
-                connectionRecipe.disconnect()
+            var recipes: String?
+            recipesList = categoryIdList?.map {
+                val requestRecipe = Request.Builder()
+                    .url("https://recipes.androidsprint.ru/api/category/${it}/recipes").build()
+                client.newCall(requestRecipe).execute().use { response ->
+                    recipes = response.body?.string()
+                    Log.i("!!!!", "response: $response")
+                    response.close()
+                }
+                val recipesListJson: List<Recipe>? =
+                    recipes?.let { Json.decodeFromString(it) }
                 recipesListJson
             }
             Log.i("!!!!", "recipesList: $recipesList")
