@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import ru.marinarodionova.recipesapp.STUB
+import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
 
@@ -26,8 +26,8 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun loadRecipeList(category: Category) {
-        //TODO: load from network
-        val recipeList = STUB.getRecipesByCategoryId(category.id)
+        val recipesRepository = RecipesRepository()
+        val recipeList = recipesRepository.getRecipesByCategoryId(category.id)
         val oldState = _state.value ?: return
         val categoriesState = oldState.copy(
             recipeList = recipeList,
@@ -40,7 +40,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     }
                 }
             } catch (e: Exception) {
-                Log.d("!!!", "Image not found ${category.imageUrl}")
+                Log.d("!!!!", "Image not found ${category.imageUrl}")
                 null
             }
         )

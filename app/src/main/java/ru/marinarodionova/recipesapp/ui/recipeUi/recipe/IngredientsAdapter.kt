@@ -29,12 +29,17 @@ class IngredientsAdapter(var dataSet: List<Ingredient>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
-        val countFormatted = BigDecimal(ingredient.quantity)
-            .multiply(BigDecimal(quantity))
-            .setScale(1, RoundingMode.HALF_UP)
-            .stripTrailingZeros()
-            .toPlainString()
-        val countMeasure = "$countFormatted ${ingredient.unitOfMeasure}"
+        val countMeasure: String
+        if (ingredient.quantity.toBigDecimalOrNull() != null) {
+            val countFormatted = BigDecimal(ingredient.quantity)
+                .multiply(BigDecimal(quantity))
+                .setScale(1, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString()
+            countMeasure = "$countFormatted ${ingredient.unitOfMeasure}"
+        } else {
+            countMeasure = "${ingredient.quantity} ${ingredient.unitOfMeasure}"
+        }
 
         with(viewHolder) {
             titleTextView.text = ingredient.description
@@ -48,7 +53,7 @@ class IngredientsAdapter(var dataSet: List<Ingredient>) :
         quantity = progress
     }
 
-    fun setIngredients(ingredients: List<Ingredient>){
+    fun setIngredients(ingredients: List<Ingredient>) {
         dataSet = ingredients
     }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
@@ -58,6 +59,9 @@ class RecipeFragment : Fragment() {
         val ingredientsAdapter = IngredientsAdapter(emptyList())
         val methodAdapter = MethodAdapter(emptyList())
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            if (state.recipeId == null) {
+                Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
+            }
             ingredientsAdapter.setIngredients(state.ingredientList.filterNotNull())
             ingredientsAdapter.updateIngredients(state.portionCount)
             binding.rvIngredients.adapter = ingredientsAdapter
@@ -66,7 +70,11 @@ class RecipeFragment : Fragment() {
             binding.rvMethod.adapter = methodAdapter
 
             binding.tvRecipeTitle.text = state.recipeName
-            binding.ivRecipe.setImageDrawable(state.recipeImg)
+            try {
+                binding.ivRecipe.setImageDrawable(state.recipeImg)
+            } catch (e: Exception) {
+                Log.d("!!!!", "RecipeFragment Image not found ${state.recipeImg}")
+            }
             val isFavorite = state.isFavorite ?: false
             binding.ibHeart.setImageResource(
                 if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty

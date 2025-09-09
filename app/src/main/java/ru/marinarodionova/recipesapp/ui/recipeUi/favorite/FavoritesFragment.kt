@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
@@ -40,6 +41,9 @@ class FavoritesFragment : Fragment() {
         val recipesListAdapter = RecipesListAdapter(emptyList())
         binding.rvRecipe.adapter = recipesListAdapter
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            if (state.recipeList == null) {
+                Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
+            }
             val dataSet: List<Recipe>? = state.recipeList
             if (dataSet == null) {
                 binding.clInformationMessage.visibility = View.VISIBLE

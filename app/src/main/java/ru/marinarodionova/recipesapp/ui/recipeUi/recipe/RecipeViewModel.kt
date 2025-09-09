@@ -10,7 +10,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
 import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
-import ru.marinarodionova.recipesapp.STUB
+import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Ingredient
 
 data class RecipeState(
@@ -30,13 +30,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     val state: LiveData<RecipeState> get() = _state
 
     init {
-        Log.d("!!!!", "Инициализация ViewModel и обновление")
+        Log.d("!!!!", "Инициализация RecipeViewModel и обновление")
         _state.value = RecipeState(isFavorite = true)
     }
 
     fun loadRecipe(recipeId: Int) {
-//        TODO: load from network
-        val recipe = STUB.getRecipeById(recipeId)
+        val recipesRepository = RecipesRepository()
+        val recipe = recipesRepository.getRecipeById(recipeId)
         favoritesSet = getFavorites()
         val isRecipeInSet = recipeId.toString() in favoritesSet.orEmpty()
         val oldState = _state.value ?: return
@@ -54,11 +54,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     }
                 }
             } catch (e: Exception) {
-                Log.d("!!!", "Image not found ${recipe?.imageUrl}")
+                Log.d("!!!", "RecipeViewModel Image not found ${recipe?.imageUrl}")
                 null
             }
         )
-
         _state.value = recipeState
     }
 
