@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -37,6 +38,9 @@ class RecipesListFragment : Fragment() {
         val recipesListAdapter = RecipesListAdapter(emptyList())
         binding.rvRecipe.adapter = recipesListAdapter
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            if (state.recipeList == null) {
+                Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
+            }
             binding.tvRecipeTitle.text = state.categoryName
             binding.ivRecipe.setImageDrawable(state.imageUrl)
             state.recipeList?.let { recipesListAdapter.setRecipeList(it) }

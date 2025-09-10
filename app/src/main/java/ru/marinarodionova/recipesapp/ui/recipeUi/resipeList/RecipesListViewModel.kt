@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import ru.marinarodionova.recipesapp.STUB
+import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
 
@@ -20,14 +20,14 @@ data class RecipesListState(
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
     private val _state = MutableLiveData(RecipesListState())
     val state: LiveData<RecipesListState> get() = _state
+    private val recipesRepository = RecipesRepository()
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
     }
 
     fun loadRecipeList(category: Category) {
-        //TODO: load from network
-        val recipeList = STUB.getRecipesByCategoryId(category.id)
+        val recipeList = recipesRepository.getRecipesByCategoryId(category.id)
         val oldState = _state.value ?: return
         val categoriesState = oldState.copy(
             recipeList = recipeList,
@@ -40,7 +40,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     }
                 }
             } catch (e: Exception) {
-                Log.d("!!!", "Image not found ${category.imageUrl}")
+                Log.d("!!!!", "Image not found ${category.imageUrl}")
                 null
             }
         )

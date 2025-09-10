@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
 import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
-import ru.marinarodionova.recipesapp.STUB
+import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Recipe
 
 data class FavoritesState(
@@ -18,16 +18,15 @@ data class FavoritesState(
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
     private val _state = MutableLiveData(FavoritesState())
     val state: LiveData<FavoritesState> get() = _state
+    private val recipesRepository = RecipesRepository()
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
     }
 
     fun loadRecipeList() {
-        //TODO: load from network
+        val recipeList = recipesRepository.getRecipesById(getFavorites().map { it.toInt() }.toSet())
         val oldState = _state.value ?: return
-
-        val recipeList = STUB.getRecipesById(getFavorites().map { it.toInt() }.toSet())
         val categoriesState = oldState.copy(
             recipeList = recipeList,
         )
