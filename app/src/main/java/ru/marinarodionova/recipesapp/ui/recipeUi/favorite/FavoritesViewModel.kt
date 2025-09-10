@@ -18,13 +18,13 @@ data class FavoritesState(
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
     private val _state = MutableLiveData(FavoritesState())
     val state: LiveData<FavoritesState> get() = _state
+    private val recipesRepository = RecipesRepository()
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
     }
 
     fun loadRecipeList() {
-        val recipesRepository = RecipesRepository()
         val recipeList = recipesRepository.getRecipesById(getFavorites().map { it.toInt() }.toSet())
         val oldState = _state.value ?: return
         val categoriesState = oldState.copy(

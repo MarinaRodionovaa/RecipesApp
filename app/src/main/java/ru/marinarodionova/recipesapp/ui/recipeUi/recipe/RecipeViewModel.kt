@@ -28,6 +28,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _state = MutableLiveData(RecipeState())
     private val currentPortionCount = _state.value?.portionCount ?: 1
     val state: LiveData<RecipeState> get() = _state
+    private val recipesRepository = RecipesRepository()
 
     init {
         Log.d("!!!!", "Инициализация RecipeViewModel и обновление")
@@ -35,7 +36,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadRecipe(recipeId: Int) {
-        val recipesRepository = RecipesRepository()
         val recipe = recipesRepository.getRecipeById(recipeId)
         favoritesSet = getFavorites()
         val isRecipeInSet = recipeId.toString() in favoritesSet.orEmpty()

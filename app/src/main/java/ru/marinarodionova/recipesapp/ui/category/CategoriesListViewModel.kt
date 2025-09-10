@@ -15,13 +15,13 @@ data class CategoriesState(
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
     private val _state = MutableLiveData(CategoriesState())
     val state: LiveData<CategoriesState> get() = _state
+    private val recipesRepository = RecipesRepository()
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
     }
 
     fun loadCategories() {
-        val recipesRepository = RecipesRepository()
         val categoriesList = recipesRepository.getCategories()
         val oldState = _state.value ?: return
         val categoriesState = oldState.copy(
