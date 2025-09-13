@@ -14,6 +14,7 @@ import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import ru.marinarodionova.recipesapp.R
 
 class PortionSeekBarListener(
@@ -70,11 +71,10 @@ class RecipeFragment : Fragment() {
             binding.rvMethod.adapter = methodAdapter
 
             binding.tvRecipeTitle.text = state.recipeName
-            try {
-                binding.ivRecipe.setImageDrawable(state.recipeImg)
-            } catch (e: Exception) {
-                Log.d("!!!!", "RecipeFragment Image not found ${state.recipeImg}")
-            }
+            Glide.with(this).load(state.recipeImg)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipe)
             val isFavorite = state.isFavorite ?: false
             binding.ibHeart.setImageResource(
                 if (isFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty

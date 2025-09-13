@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipesListBinding
 import ru.marinarodionova.recipesapp.models.Category
 
@@ -38,12 +40,16 @@ class RecipesListFragment : Fragment() {
         val recipesListAdapter = RecipesListAdapter(emptyList())
         binding.rvRecipe.adapter = recipesListAdapter
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            binding.tvRecipeTitle.text = state.categoryName
+            Glide.with(this).load(state.imageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipe)
+            state.recipeList?.let { recipesListAdapter.setRecipeList(it)
+            }
             if (state.recipeList == null) {
                 Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
             }
-            binding.tvRecipeTitle.text = state.categoryName
-            binding.ivRecipe.setImageDrawable(state.imageUrl)
-            state.recipeList?.let { recipesListAdapter.setRecipeList(it) }
             recipesListAdapter.setOnItemClickListener(object :
                 RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipeId: Int) {
