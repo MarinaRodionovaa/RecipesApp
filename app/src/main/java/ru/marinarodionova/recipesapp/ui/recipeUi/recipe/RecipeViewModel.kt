@@ -7,9 +7,12 @@ import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
 import ru.marinarodionova.recipesapp.GET_IMG_API
 import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
+import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Ingredient
 
@@ -20,7 +23,8 @@ data class RecipeState(
     val method: List<String?> = listOf(null),
     val ingredientList: List<Ingredient?> = listOf(null),
     val portionCount: Int = 1,
-    val isFavorite: Boolean? = null
+    val isFavorite: Boolean? = null,
+    var loadingStatus: LoadingStatus = LoadingStatus.NOT_READY
 )
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -36,20 +40,27 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadRecipe(recipeId: Int) {
-        val recipe = recipesRepository.getRecipeById(recipeId)
-        favoritesSet = getFavorites()
-        val isRecipeInSet = recipeId.toString() in favoritesSet.orEmpty()
-        val oldState = _state.value ?: return
-        val recipeState = oldState.copy(
-            recipeId = recipeId,
-            recipeName = recipe?.title,
-            method = recipe?.method ?: listOf(null),
-            ingredientList = recipe?.ingredients ?: listOf(null),
-            portionCount = currentPortionCount,
-            isFavorite = isRecipeInSet,
-            recipeImg = "$GET_IMG_API${recipe?.imageUrl}"
-        )
-        _state.value = recipeState
+        viewModelScope.launch {
+            val recipe = recipesRepository.getRecipeById(recipeId)
+            favoritesSet = getFavorites()
+            val isRecipeInSet = recipeId.toString() in favoritesSet.orEmpty()
+            val oldState = _state.value ?: return@launch
+            val recipeState = oldState.copy(
+                recipeId = recipeId,
+                recipeName = recipe?.title,
+                method = recipe?.method ?: listOf(null),
+                ingredientList = recipe?.ingredients ?: listOf(null),
+                portionCount = currentPortionCount,
+                isFavorite = isRecipeInSet,
+                recipeImg = "$GET_IMG_API${recipe?.imageUrl}",
+                loadingStatus = if (recipe == null) {
+                    LoadingStatus.FAILED
+                } else {
+                    LoadingStatus.READY
+                }
+            )
+            _state.value = recipeState
+        }
     }
 
     private fun getFavorites(): HashSet<String> {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.databinding.FragmentCategoriesListBinding
 import ru.marinarodionova.recipesapp.models.Category
 
@@ -42,9 +43,18 @@ class CategoriesListFragment : Fragment() {
         val categoriesListAdapter = CategoriesListAdapter(emptyList())
         binding.rvCategories.adapter = categoriesListAdapter
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            state.categoriesList?.let { categoriesListAdapter.setCategories(it) }
-            if (state.categoriesList == null) {
-                Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
+            when (state.loadingStatus) {
+                LoadingStatus.READY -> state.categoriesList?.let {
+                    categoriesListAdapter.setCategories(
+                        it
+                    )
+                }
+
+                LoadingStatus.FAILED -> {
+                    Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
+                }
+
+                LoadingStatus.NOT_READY -> {}
             }
         }
         categoriesListAdapter.setOnItemClickListener(object :

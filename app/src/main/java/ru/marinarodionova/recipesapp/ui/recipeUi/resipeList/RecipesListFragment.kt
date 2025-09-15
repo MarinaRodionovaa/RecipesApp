@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipesListBinding
 import ru.marinarodionova.recipesapp.models.Category
@@ -45,9 +46,10 @@ class RecipesListFragment : Fragment() {
                 .placeholder(R.drawable.img_placeholder)
                 .error(R.drawable.img_error)
                 .into(binding.ivRecipe)
-            state.recipeList?.let { recipesListAdapter.setRecipeList(it)
+            state.recipeList?.let {
+                recipesListAdapter.setRecipeList(it)
             }
-            if (state.recipeList == null) {
+            if (state.loadingStatus == LoadingStatus.FAILED) {
                 Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
             }
             recipesListAdapter.setOnItemClickListener(object :

@@ -57,5 +57,6 @@ class RecipesListAdapter(var dataSet: List<Recipe>) :
 
     fun setRecipeList(recipeList: List<Recipe>) {
         dataSet = recipeList
+        notifyDataSetChanged()
     }
 }

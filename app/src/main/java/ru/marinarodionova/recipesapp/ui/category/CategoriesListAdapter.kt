@@ -61,8 +61,9 @@ class CategoriesListAdapter(var dataSet: List<Category>) :
 
     }
 
-    fun setCategories(categories: List<Category>){
+    fun setCategories(categories: List<Category>) {
         dataSet = categories
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = dataSet.size

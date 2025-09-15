@@ -55,5 +55,6 @@ class IngredientsAdapter(var dataSet: List<Ingredient>) :
 
     fun setIngredients(ingredients: List<Ingredient>) {
         dataSet = ingredients
+        notifyDataSetChanged()
     }
 }

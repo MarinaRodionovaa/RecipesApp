@@ -33,5 +33,6 @@ class MethodAdapter(var dataSet: List<String>) :
 
     fun setMethod(method: List<String>){
         dataSet = method
+        notifyDataSetChanged()
     }
 }
