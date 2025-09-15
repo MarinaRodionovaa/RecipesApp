@@ -1,16 +1,15 @@
 package ru.marinarodionova.recipesapp.ui.recipeUi.resipeList
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import ru.marinarodionova.recipesapp.GET_IMG_API
 import ru.marinarodionova.recipesapp.R
 import ru.marinarodionova.recipesapp.models.Recipe
-import java.io.InputStream
 import ru.marinarodionova.recipesapp.databinding.ItemRecipeBinding
 
 class RecipesListAdapter(var dataSet: List<Recipe>) :
@@ -42,15 +41,11 @@ class RecipesListAdapter(var dataSet: List<Recipe>) :
         val recipe: Recipe = dataSet[position]
         with(viewHolder) {
             titleTextView.text = recipe.title
-            val inputStream: InputStream? =
-                try {
-                    itemView.context?.assets?.open(dataSet[position].imageUrl)
-                } catch (e: Exception) {
-                    Log.d("!!!", "Image not found ${recipe.imageUrl}")
-                    null
-                }
-            val drawable = Drawable.createFromStream(inputStream, null)
-            imageView.setImageDrawable(drawable)
+            Glide.with(itemView.context)
+                .load("$GET_IMG_API${dataSet[position].imageUrl}")
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(imageView)
             itemView.setOnClickListener {
                 itemClickListener?.onItemClick(recipeId = recipe.id)
             }
