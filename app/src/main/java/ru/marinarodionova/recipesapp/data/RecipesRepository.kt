@@ -1,6 +1,9 @@
 package ru.marinarodionova.recipesapp.data
 
+import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Call
@@ -8,11 +11,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
-import java.util.concurrent.Executors
-import java.util.concurrent.Callable
 
 class RecipesRepository {
-    private val executor = Executors.newFixedThreadPool(10)
     private val contentType = "application/json".toMediaType()
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://recipes.androidsprint.ru/api/")
@@ -21,85 +21,76 @@ class RecipesRepository {
 
     private val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    fun getCategories(): List<Category>? {
+    suspend fun getCategories(): List<Category>? {
         var categories: List<Category>? = null
-        val categoriesApi = executor.submit(Callable {
-            try {
+        try {
+            withContext(Dispatchers.IO) {
                 val categoriesCall: Call<List<Category>> = service.getCategories()
                 val categoriesResponse: Response<List<Category>> = categoriesCall.execute()
                 categories = categoriesResponse.body()
-                categories
-            } catch (e: Exception) {
-                null
             }
-        })
-        categoriesApi.get()
+        } catch (e: Exception) {
+            Log.i("!!!!", "getCategories failed")
+        }
         return categories
     }
 
-    fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         var recipeList: List<Recipe>? = null
-        val getRecipeList = executor.submit(Callable {
-            try {
+        try {
+            withContext(Dispatchers.IO) {
                 val recipeListCall: Call<List<Recipe>> = service.getRecipesByCategoryId(categoryId)
                 val recipeListResponse: Response<List<Recipe>> = recipeListCall.execute()
                 recipeList = recipeListResponse.body()
-                recipeList
-            } catch (e: Exception) {
-                null
             }
-        })
-        getRecipeList.get()
+        } catch (e: Exception) {
+            Log.i("!!!!", "getRecipesByCategoryId failed")
+        }
+
         return recipeList
     }
 
-    fun getCategoryByCategoryId(categoryId: Int): Category? {
+    suspend fun getCategoryByCategoryId(categoryId: Int): Category? {
         var category: Category? = null
-        val getCategory = executor.submit(Callable {
-            try {
+        try {
+            withContext(Dispatchers.IO) {
+
                 val categoryCall: Call<Category> = service.getCategoryById(categoryId)
                 val categoryResponse: Response<Category> = categoryCall.execute()
                 category = categoryResponse.body()
-                category
-            } catch (e: Exception) {
-                null
             }
-        })
-        getCategory.get()
+        } catch (e: Exception) {
+            Log.i("!!!!", "getCategoryByCategoryId failed")
+        }
         return category
     }
 
-    fun getRecipeById(recipeId: Int): Recipe? {
+    suspend fun getRecipeById(recipeId: Int): Recipe? {
         var recipe: Recipe? = null
-        val getRecipe = executor.submit(Callable {
-            try {
+        try {
+            withContext(Dispatchers.IO) {
                 val recipeCall: Call<Recipe> = service.getRecipeById(recipeId)
                 val recipeResponse: Response<Recipe> = recipeCall.execute()
                 recipe = recipeResponse.body()
-                recipe
-            } catch (e: Exception) {
-                null
             }
-        })
-        getRecipe.get()
+        } catch (e: Exception) {
+            Log.i("!!!!", "getRecipeById failed")
+        }
         return recipe
     }
 
-    fun getRecipesById(idSet: Set<Int>): List<Recipe>? {
+    suspend fun getRecipesById(idSet: Set<Int>): List<Recipe>? {
         var recipes: List<Recipe>? = null
-        val getRecipes = executor.submit(Callable {
-            try {
+        try {
+            withContext(Dispatchers.IO) {
                 val recipeListCall: Call<List<Recipe>> =
                     service.getRecipesByIds(idSet.joinToString(","))
                 val recipeListResponse: Response<List<Recipe>> = recipeListCall.execute()
                 recipes = recipeListResponse.body()
-                recipes
-            } catch (e: Exception) {
-                null
             }
-        })
-        getRecipes.get()
+        } catch (e: Exception) {
+            Log.i("!!!!", "getRecipesById failed")
+        }
         return recipes
-
     }
 }

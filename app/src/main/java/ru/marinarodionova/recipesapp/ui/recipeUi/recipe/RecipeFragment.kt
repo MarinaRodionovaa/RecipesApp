@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.R
 
 class PortionSeekBarListener(
@@ -60,7 +61,7 @@ class RecipeFragment : Fragment() {
         val ingredientsAdapter = IngredientsAdapter(emptyList())
         val methodAdapter = MethodAdapter(emptyList())
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            if (state.recipeId == null) {
+            if (state.loadingStatus == LoadingStatus.FAILED) {
                 Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
             }
             ingredientsAdapter.setIngredients(state.ingredientList.filterNotNull())

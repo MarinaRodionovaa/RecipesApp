@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.databinding.FragmentFavoritesBinding
-import ru.marinarodionova.recipesapp.models.Recipe
 import ru.marinarodionova.recipesapp.ui.recipeUi.resipeList.RecipesListAdapter
 
 class FavoritesFragment : Fragment() {
@@ -41,22 +41,21 @@ class FavoritesFragment : Fragment() {
         val recipesListAdapter = RecipesListAdapter(emptyList())
         binding.rvRecipe.adapter = recipesListAdapter
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            if (state.recipeList == null) {
+            state.recipeList?.let { recipesListAdapter.setRecipeList(it) }
+
+            if (state.loadingStatus != LoadingStatus.NOT_READY && state.recipeList == null) {
                 Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_SHORT).show()
-            }
-            val dataSet: List<Recipe>? = state.recipeList
-            if (dataSet == null) {
                 binding.clInformationMessage.visibility = View.VISIBLE
-            } else {
-                recipesListAdapter.setRecipeList(dataSet)
-                recipesListAdapter.setOnItemClickListener(object :
-                    RecipesListAdapter.OnItemClickListener {
-                    override fun onItemClick(recipeId: Int) {
-                        openRecipeByRecipeId(recipeId)
-                    }
-                }
-                )
             }
+
+            recipesListAdapter.setOnItemClickListener(object :
+                RecipesListAdapter.OnItemClickListener {
+                override fun onItemClick(recipeId: Int) {
+                    openRecipeByRecipeId(recipeId)
+                }
+            }
+            )
+
         }
     }
 
