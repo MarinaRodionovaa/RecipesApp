@@ -25,7 +25,7 @@ class RecipesRepository(context: Context) {
             context.applicationContext,
             AppDatabase::class.java,
             "database"
-        ).fallbackToDestructiveMigration(true).build()
+        ).build()
     private val categoryDao = database.categoryDao()
     private val recipeDao = database.recipesDao()
 
