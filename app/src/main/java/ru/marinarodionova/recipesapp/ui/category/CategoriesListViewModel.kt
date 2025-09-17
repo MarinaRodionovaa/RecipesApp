@@ -19,7 +19,7 @@ data class CategoriesState(
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
     private val _state = MutableLiveData(CategoriesState())
     val state: LiveData<CategoriesState> get() = _state
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application)
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
@@ -27,17 +27,35 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     fun loadCategories() {
         viewModelScope.launch {
+            val categoriesListFormCache = recipesRepository.getCategoriesFromCache()
+            if (categoriesListFormCache.isNotEmpty()) {
+                val oldState = _state.value ?: return@launch
+                val categoriesState = oldState.copy(
+                    categoriesList = categoriesListFormCache,
+                    loadingStatus = if (categoriesListFormCache.isEmpty()) {
+                        LoadingStatus.NOT_READY
+                    } else {
+                        LoadingStatus.READY
+                    }
+                )
+                _state.value = categoriesState
+            }
             val categoriesList = recipesRepository.getCategories()
-            val oldState = _state.value ?: return@launch
-            val categoriesState = oldState.copy(
-                categoriesList = categoriesList,
-                loadingStatus = if (categoriesList == null) {
-                    LoadingStatus.FAILED
-                } else {
-                    LoadingStatus.READY
-                }
-            )
-            _state.value = categoriesState
+            if (categoriesListFormCache != categoriesList && categoriesList != null) {
+                val oldState = _state.value ?: return@launch
+                val categoriesState = oldState.copy(
+                    categoriesList = categoriesList,
+                    loadingStatus = LoadingStatus.READY
+                )
+                _state.value = categoriesState
+                recipesRepository.insertCategoriesToCache(categoriesList)
+            } else if (categoriesList == null) {
+                val oldState = _state.value ?: return@launch
+                val categoriesState = oldState.copy(
+                    loadingStatus = LoadingStatus.FAILED
+                )
+                _state.value = categoriesState
+            }
         }
     }
 }
