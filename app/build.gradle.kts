@@ -4,6 +4,7 @@ plugins {
     id("kotlin-parcelize")
     kotlin("plugin.serialization") version "2.0.21"
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.devtools.ksp") version "2.0.21-1.0.28"
 }
 
 android {
@@ -69,4 +70,7 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.github.bumptech.glide:glide:5.0.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.room:room-runtime:2.8.0")
+//    annotationProcessor("androidx.room:room-compiler:2.8.0")
+    ksp("androidx.room:room-compiler:2.8.0")
 }

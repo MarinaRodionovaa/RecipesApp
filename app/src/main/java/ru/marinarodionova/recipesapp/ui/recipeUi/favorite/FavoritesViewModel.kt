@@ -22,7 +22,7 @@ data class FavoritesState(
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
     private val _state = MutableLiveData(FavoritesState())
     val state: LiveData<FavoritesState> get() = _state
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application)
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
@@ -30,19 +30,32 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadRecipeList() {
         viewModelScope.launch {
-            val recipeList =
-                recipesRepository.getRecipesById(getFavorites().map { it.toInt() }.toSet())
-            val oldState = _state.value ?: return@launch
-            val categoriesState = oldState.copy(
-                recipeList = recipeList,
-                loadingStatus = if (recipeList == null) {
-                    LoadingStatus.FAILED
-                } else {
-                    LoadingStatus.READY
-                }
-            )
-
-            _state.value = categoriesState
+            val favorites = getFavorites().map { it.toInt() }.toSet()
+            val recipeListData = recipesRepository.getRecipesByIdFromCache(favorites)
+            if (recipeListData.isNotEmpty()) {
+                val oldState = _state.value ?: return@launch
+                val categoriesState = oldState.copy(
+                    recipeList = recipeListData,
+                    loadingStatus = LoadingStatus.READY
+                )
+                _state.value = categoriesState
+            }
+            val recipeListServer =
+                recipesRepository.getRecipesById(favorites)
+            if (recipeListServer != recipeListData && recipeListServer != null) {
+                val oldState = _state.value ?: return@launch
+                val categoriesState = oldState.copy(
+                    recipeList = recipeListServer,
+                    loadingStatus = LoadingStatus.READY
+                )
+                _state.value = categoriesState
+            } else if (recipeListServer == null) {
+                val oldState = _state.value ?: return@launch
+                val categoriesState = oldState.copy(
+                    loadingStatus = LoadingStatus.FAILED
+                )
+                _state.value = categoriesState
+            }
         }
     }
 
