@@ -32,7 +32,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _state = MutableLiveData(RecipeState())
     private val currentPortionCount = _state.value?.portionCount ?: 1
     val state: LiveData<RecipeState> get() = _state
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application)
 
     init {
         Log.d("!!!!", "Инициализация RecipeViewModel и обновление")
@@ -41,25 +41,45 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
-            val recipe = recipesRepository.getRecipeById(recipeId)
             favoritesSet = getFavorites()
             val isRecipeInSet = recipeId.toString() in favoritesSet.orEmpty()
-            val oldState = _state.value ?: return@launch
-            val recipeState = oldState.copy(
-                recipeId = recipeId,
-                recipeName = recipe?.title,
-                method = recipe?.method ?: listOf(null),
-                ingredientList = recipe?.ingredients ?: listOf(null),
-                portionCount = currentPortionCount,
-                isFavorite = isRecipeInSet,
-                recipeImg = "$GET_IMG_API${recipe?.imageUrl}",
-                loadingStatus = if (recipe == null) {
-                    LoadingStatus.FAILED
-                } else {
-                    LoadingStatus.READY
-                }
-            )
-            _state.value = recipeState
+            val recipeData = recipesRepository.getRecipeByIdFromCache(recipeId)
+            if (recipeData != null) {
+                val oldState = _state.value ?: return@launch
+                val recipeState = oldState.copy(
+                    recipeId = recipeId,
+                    recipeName = recipeData.title,
+                    method = recipeData.method,
+                    ingredientList = recipeData.ingredients,
+                    portionCount = currentPortionCount,
+                    isFavorite = isRecipeInSet,
+                    recipeImg = "$GET_IMG_API${recipeData.imageUrl}",
+                    loadingStatus = LoadingStatus.READY
+                )
+                _state.value = recipeState
+            }
+            val recipeFromServer = recipesRepository.getRecipeById(recipeId)
+            if (recipeData != recipeFromServer && recipeFromServer != null) {
+                val oldState = _state.value ?: return@launch
+                val recipeState = oldState.copy(
+                    recipeId = recipeId,
+                    recipeName = recipeFromServer.title,
+                    method = recipeFromServer.method ,
+                    ingredientList = recipeFromServer.ingredients,
+                    portionCount = currentPortionCount,
+                    isFavorite = isRecipeInSet,
+                    recipeImg = "$GET_IMG_API${recipeFromServer.imageUrl}",
+                    loadingStatus = LoadingStatus.READY
+                )
+                _state.value = recipeState
+
+            } else if (recipeFromServer == null) {
+                val oldState = _state.value ?: return@launch
+                val recipeState = oldState.copy(
+                    loadingStatus = LoadingStatus.FAILED
+                )
+                _state.value = recipeState
+            }
         }
     }
 
