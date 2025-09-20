@@ -84,7 +84,7 @@ class RecipeFragment : Fragment() {
             binding.skCountPortion.progress = state.portionCount
 
             binding.ibHeart.setOnClickListener {
-                viewModel.onFavoritesClicked()
+                state.recipeId?.let { viewModel.onFavoritesClicked(it) }
             }
         }
 

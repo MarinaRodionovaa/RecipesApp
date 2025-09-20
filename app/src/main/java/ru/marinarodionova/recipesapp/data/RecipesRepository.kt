@@ -11,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
+import ru.marinarodionova.recipesapp.models.RecipeEntity
 import ru.marinarodionova.recipesapp.models.toDomain
 import ru.marinarodionova.recipesapp.models.toEntity
 
@@ -25,7 +26,7 @@ class RecipesRepository(context: Context) {
             context.applicationContext,
             AppDatabase::class.java,
             "database"
-        ).build()
+        ).fallbackToDestructiveMigration(true).build()
     private val categoryDao = database.categoryDao()
     private val recipeDao = database.recipesDao()
 
@@ -76,14 +77,23 @@ class RecipesRepository(context: Context) {
         return recipe
     }
 
-    suspend fun getRecipeByIdFromCache(recipeId: Int): Recipe? {
-        return recipeDao.getRecipeById(recipeId)?.toDomain()
+    suspend fun getRecipeByIdFromCache(recipeId: Int): RecipeEntity? {
+        return recipeDao.getRecipeById(recipeId)
     }
 
     suspend fun insertRecipesByCategoryToCache(recipes: List<Recipe>, categoryId: Int) {
         for (recipe in recipes) {
-            recipeDao.insertRecipes(recipe.toEntity(categoryId))
+            val isFavorite = recipe.id in recipeDao.getFavorites()
+            recipeDao.insertRecipes(recipe.toEntity(categoryId, isFavorite))
         }
+    }
+
+    suspend fun insertRecipeToCache(recipe: RecipeEntity) {
+        recipeDao.insertRecipes(recipe)
+    }
+
+    suspend fun getFavoritesFromCache(): Set<Int> {
+        return recipeDao.getFavorites().toSet()
     }
 
     suspend fun getCategoryByCategoryId(categoryId: Int): Category? {
