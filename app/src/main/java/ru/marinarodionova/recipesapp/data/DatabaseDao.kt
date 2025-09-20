@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.RecipeEntity
 
-@Database(entities = [Category::class, RecipeEntity::class], version = 1)
+@Database(entities = [Category::class, RecipeEntity::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoriesDao

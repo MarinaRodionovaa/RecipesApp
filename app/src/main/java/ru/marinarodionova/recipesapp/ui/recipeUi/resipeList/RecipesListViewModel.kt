@@ -55,6 +55,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     loadingStatus = LoadingStatus.READY
                 )
                 _state.value = recipesState
+
                 recipesRepository.insertRecipesByCategoryToCache(recipeList, category.id)
             } else if (recipeList == null) {
                 val oldState = _state.value ?: return@launch

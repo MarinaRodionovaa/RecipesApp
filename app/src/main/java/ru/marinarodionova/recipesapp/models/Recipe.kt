@@ -25,16 +25,18 @@ data class RecipeEntity(
     @ColumnInfo(name = "method") val method: List<String>,
     @ColumnInfo(name = "imageUrl") val imageUrl: String,
     @ColumnInfo(name = "categoryId") val categoryId: Int,
+    @ColumnInfo(name = "isFavorite") val isFavorite: Boolean,
 )
 
-fun Recipe.toEntity(categoryId: Int): RecipeEntity =
+fun Recipe.toEntity(categoryId: Int, isFavorite: Boolean): RecipeEntity =
     RecipeEntity(
         id = id,
         title = title,
         ingredients = ingredients,
         method = method,
         imageUrl = imageUrl,
-        categoryId = categoryId
+        categoryId = categoryId,
+        isFavorite = isFavorite
     )
 
 fun RecipeEntity.toDomain(): Recipe =

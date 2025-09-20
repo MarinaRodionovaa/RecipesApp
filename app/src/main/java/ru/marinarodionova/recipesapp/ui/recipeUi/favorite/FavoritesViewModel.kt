@@ -1,15 +1,12 @@
 package ru.marinarodionova.recipesapp.ui.recipeUi.favorite
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.marinarodionova.recipesapp.FAVORITES_PREFS_NAME
-import ru.marinarodionova.recipesapp.KEY_FAVORITES_SET
 import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Recipe
@@ -30,7 +27,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadRecipeList() {
         viewModelScope.launch {
-            val favorites = getFavorites().map { it.toInt() }.toSet()
+            val favorites = getFavorites()
             val recipeListData = recipesRepository.getRecipesByIdFromCache(favorites)
             if (recipeListData.isNotEmpty()) {
                 val oldState = _state.value ?: return@launch
@@ -59,12 +56,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    private fun getFavorites(): HashSet<String> {
-        val sharedPrefs =
-            getApplication<Application>().getSharedPreferences(
-                FAVORITES_PREFS_NAME,
-                Context.MODE_PRIVATE
-            )
-        return HashSet(sharedPrefs.getStringSet(KEY_FAVORITES_SET, emptySet()) ?: emptySet())
+    private suspend fun getFavorites(): Set<Int> {
+        return recipesRepository.getFavoritesFromCache()
     }
 }
