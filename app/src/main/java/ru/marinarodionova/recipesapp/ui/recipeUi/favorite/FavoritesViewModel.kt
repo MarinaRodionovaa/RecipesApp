@@ -1,10 +1,9 @@
 package ru.marinarodionova.recipesapp.ui.recipeUi.favorite
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.marinarodionova.recipesapp.LoadingStatus
@@ -16,10 +15,9 @@ data class FavoritesState(
     var loadingStatus: LoadingStatus = LoadingStatus.NOT_READY
 )
 
-class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
+class FavoritesViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
     private val _state = MutableLiveData(FavoritesState())
     val state: LiveData<FavoritesState> get() = _state
-    private val recipesRepository = RecipesRepository(application)
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")
@@ -27,8 +25,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadRecipeList() {
         viewModelScope.launch {
-            val favorites = getFavorites()
-            val recipeListData = recipesRepository.getRecipesByIdFromCache(favorites)
+            val recipeListData = recipesRepository.getFavoritesRecipesFromCache()
             if (recipeListData.isNotEmpty()) {
                 val oldState = _state.value ?: return@launch
                 val categoriesState = oldState.copy(
@@ -38,7 +35,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                 _state.value = categoriesState
             }
             val recipeListServer =
-                recipesRepository.getRecipesById(favorites)
+                recipesRepository.getRecipesById(recipeListData.map { it.id }.toSet())
             if (recipeListServer != recipeListData && recipeListServer != null) {
                 val oldState = _state.value ?: return@launch
                 val categoriesState = oldState.copy(
@@ -54,9 +51,5 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                 _state.value = categoriesState
             }
         }
-    }
-
-    private suspend fun getFavorites(): Set<Int> {
-        return recipesRepository.getFavoritesFromCache()
     }
 }

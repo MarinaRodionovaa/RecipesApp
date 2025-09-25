@@ -1,41 +1,25 @@
 package ru.marinarodionova.recipesapp.data
 
-import android.content.Context
 import android.util.Log
-import androidx.room.Room
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
 import ru.marinarodionova.recipesapp.models.RecipeEntity
 import ru.marinarodionova.recipesapp.models.toDomain
 import ru.marinarodionova.recipesapp.models.toEntity
+import kotlin.coroutines.CoroutineContext
 
-class RecipesRepository(context: Context) {
-    private val contentType = "application/json".toMediaType()
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://recipes.androidsprint.ru/api/")
-        .addConverterFactory(Json.asConverterFactory(contentType))
-        .build()
-    private val database =
-        Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            "database"
-        ).fallbackToDestructiveMigration(true).build()
-    private val categoryDao = database.categoryDao()
-    private val recipeDao = database.recipesDao()
-
-    private val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
-
+class RecipesRepository(
+    private val recipeDao: RecipesDao,
+    private val categoryDao: CategoriesDao,
+    private val service: RecipeApiService,
+    private val ioDispatcher: CoroutineContext,
+    private val recipeApiService: RecipeApiService
+) {
     suspend fun getCategories(): List<Category>? {
         var categories: List<Category>? = null
         try {
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 categories = service.getCategories()
             }
         } catch (e: Exception) {
@@ -57,7 +41,7 @@ class RecipesRepository(context: Context) {
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         var recipeList: List<Recipe>? = null
         try {
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 recipeList = service.getRecipesByCategoryId(categoryId)
             }
         } catch (e: Exception) {
@@ -83,7 +67,7 @@ class RecipesRepository(context: Context) {
 
     suspend fun insertRecipesByCategoryToCache(recipes: List<Recipe>, categoryId: Int) {
         for (recipe in recipes) {
-            val isFavorite = recipe.id in recipeDao.getFavorites()
+            val isFavorite = recipe.id in recipeDao.getFavoritesIds()
             recipeDao.insertRecipes(recipe.toEntity(categoryId, isFavorite))
         }
     }
@@ -92,14 +76,18 @@ class RecipesRepository(context: Context) {
         recipeDao.insertRecipes(recipe)
     }
 
-    suspend fun getFavoritesFromCache(): Set<Int> {
-        return recipeDao.getFavorites().toSet()
+    suspend fun getFavoritesIdsFromCache(): Set<Int> {
+        return recipeDao.getFavoritesIds().toSet()
+    }
+
+    suspend fun getFavoritesRecipesFromCache(): List<Recipe> {
+        return recipeDao.getFavoritesRecipes().map { it.toDomain() }
     }
 
     suspend fun getCategoryByCategoryId(categoryId: Int): Category? {
         var category: Category? = null
         try {
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 category = service.getCategoryById(categoryId)
             }
         } catch (e: Exception) {
@@ -111,7 +99,7 @@ class RecipesRepository(context: Context) {
     suspend fun getRecipeById(recipeId: Int): Recipe? {
         var recipe: Recipe? = null
         try {
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 recipe = service.getRecipeById(recipeId)
             }
         } catch (e: Exception) {
@@ -123,7 +111,7 @@ class RecipesRepository(context: Context) {
     suspend fun getRecipesById(idSet: Set<Int>): List<Recipe>? {
         var recipes: List<Recipe>? = null
         try {
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 recipes =
                     service.getRecipesByIds(idSet.joinToString(","))
             }
