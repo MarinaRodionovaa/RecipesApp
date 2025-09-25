@@ -12,11 +12,11 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import ru.marinarodionova.recipesapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.R
+import ru.marinarodionova.recipesapp.RecipesApplication
 
 class PortionSeekBarListener(
     private val onChangeIngredients: (Int) -> Unit
@@ -36,8 +36,14 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
-    private val viewModel: RecipeViewModel by viewModels()
+    private lateinit var viewModel: RecipeViewModel
     val args: RecipeFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        viewModel = appContainer.recipeViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

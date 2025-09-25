@@ -1,10 +1,9 @@
 package ru.marinarodionova.recipesapp.ui.category
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.marinarodionova.recipesapp.LoadingStatus
@@ -16,10 +15,11 @@ data class CategoriesState(
     var loadingStatus: LoadingStatus = LoadingStatus.NOT_READY
 )
 
-class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
+class CategoriesListViewModel(
+    private val recipesRepository: RecipesRepository
+) : ViewModel() {
     private val _state = MutableLiveData(CategoriesState())
     val state: LiveData<CategoriesState> get() = _state
-    private val recipesRepository = RecipesRepository(application)
 
     init {
         Log.d("!!!!", "Инициализация ViewModel и обновление")

@@ -3,8 +3,7 @@ package ru.marinarodionova.recipesapp.ui.recipeUi.recipe
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.marinarodionova.recipesapp.GET_IMG_API
@@ -25,12 +24,11 @@ data class RecipeState(
     var loadingStatus: LoadingStatus = LoadingStatus.NOT_READY
 )
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
+class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
     private var favoritesSet: Set<Int>? = null
     private val _state = MutableLiveData(RecipeState())
     private val currentPortionCount = _state.value?.portionCount ?: 1
     val state: LiveData<RecipeState> get() = _state
-    private val recipesRepository = RecipesRepository(application)
 
     init {
         Log.d("!!!!", "Инициализация RecipeViewModel и обновление")
@@ -84,7 +82,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private suspend fun getFavorites(): Set<Int> {
-        return recipesRepository.getFavoritesFromCache()
+        return recipesRepository.getFavoritesIdsFromCache()
     }
 
     fun onFavoritesClicked(recipeId: Int) {

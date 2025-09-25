@@ -18,7 +18,10 @@ interface RecipesDao {
     suspend fun getRecipesById(ids: Set<Int>): List<RecipeEntity>
 
     @Query("SELECT id FROM recipes WHERE isFavorite == 1")
-    suspend fun getFavorites(): List<Int>
+    suspend fun getFavoritesIds(): List<Int>
+
+    @Query("SELECT * FROM recipes WHERE isFavorite == 1")
+    suspend fun getFavoritesRecipes(): List<RecipeEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipes(vararg recipe: RecipeEntity)
