@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.marinarodionova.recipesapp.GET_IMG_API
 import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Ingredient
 import ru.marinarodionova.recipesapp.models.toDomain
+import javax.inject.Inject
 
 data class RecipeState(
     val recipeId: Int? = null,
@@ -24,7 +26,9 @@ data class RecipeState(
     var loadingStatus: LoadingStatus = LoadingStatus.NOT_READY
 )
 
-class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(private val recipesRepository: RecipesRepository) :
+    ViewModel() {
     private var favoritesSet: Set<Int>? = null
     private val _state = MutableLiveData(RecipeState())
     private val currentPortionCount = _state.value?.portionCount ?: 1

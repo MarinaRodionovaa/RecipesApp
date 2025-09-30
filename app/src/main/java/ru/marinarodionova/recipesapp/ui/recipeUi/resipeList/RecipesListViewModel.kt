@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.marinarodionova.recipesapp.GET_IMG_API
 import ru.marinarodionova.recipesapp.LoadingStatus
 import ru.marinarodionova.recipesapp.data.RecipesRepository
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
+import javax.inject.Inject
 
 data class RecipesListState(
     val imageUrl: String? = null,
@@ -20,7 +22,9 @@ data class RecipesListState(
     var loadingStatus: LoadingStatus = LoadingStatus.NOT_READY
 )
 
-class RecipesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipesListViewModel @Inject constructor(private val recipesRepository: RecipesRepository) :
+    ViewModel() {
     private val _state = MutableLiveData(RecipesListState())
     val state: LiveData<RecipesListState> get() = _state
 

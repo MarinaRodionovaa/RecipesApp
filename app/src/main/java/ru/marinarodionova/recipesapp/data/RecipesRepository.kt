@@ -1,21 +1,21 @@
 package ru.marinarodionova.recipesapp.data
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.marinarodionova.recipesapp.models.Category
 import ru.marinarodionova.recipesapp.models.Recipe
 import ru.marinarodionova.recipesapp.models.RecipeEntity
 import ru.marinarodionova.recipesapp.models.toDomain
 import ru.marinarodionova.recipesapp.models.toEntity
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     private val recipeDao: RecipesDao,
     private val categoryDao: CategoriesDao,
-    private val service: RecipeApiService,
-    private val ioDispatcher: CoroutineContext,
-    private val recipeApiService: RecipeApiService
+    private val service: RecipeApiService
 ) {
+    private val ioDispatcher = Dispatchers.IO
     suspend fun getCategories(): List<Category>? {
         var categories: List<Category>? = null
         try {
